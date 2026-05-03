@@ -1,0 +1,55 @@
+TOPIC: PROCESSES
+Category: Operating Systems (OS)
+
+DEFINITION:
+A Process is a program in execution — an active instance of a program that is loaded into memory and managed by the operating system. A program is a static set of instructions stored on disk; a process is the dynamic running entity with its own memory space, resources, and state. The OS manages all processes through the Process Control Block (PCB).
+
+KEY CONCEPTS:
+- Program vs Process: A program is passive (stored on disk). A process is active (running in memory). Multiple processes can run the same program simultaneously (e.g., two instances of a browser).
+- Process Control Block (PCB): A data structure maintained by the OS for each process. Contains: Process ID (PID), process state, program counter, CPU registers, memory limits, open file list, scheduling information.
+- Process States:
+  - New: Process is being created.
+  - Ready: Process is loaded in memory, waiting for CPU allocation.
+  - Running: Process is currently executing on CPU.
+  - Waiting/Blocked: Process is waiting for I/O or an event (e.g., disk read, user input).
+  - Terminated: Process has finished execution.
+- Context Switch: The OS saves the state (PCB) of the currently running process and loads the saved state of the next process. Enables multitasking. Has CPU overhead.
+- Process Creation: Via fork() system call in Unix/Linux — creates a child process as an exact copy of the parent. exec() is used to replace the process image with a new program.
+- Process Termination: Via exit() (normal) or killed by OS (abnormal). Resources are reclaimed.
+- Zombie Process: A terminated child process whose exit status has not been read by the parent. The PCB remains in the system.
+- Orphan Process: A child process whose parent has terminated. Adopted by init (PID 1).
+- Inter-Process Communication (IPC): Mechanisms for processes to communicate — Pipes, Message Queues, Shared Memory, Sockets, Signals.
+
+EXPLANATION:
+The OS creates the illusion of running many programs simultaneously by rapidly switching the CPU between processes (multitasking). Each process has its own isolated virtual address space — a process cannot directly access another process's memory, which provides protection and stability. Context switching is the key mechanism: the OS periodically interrupts a running process (triggered by a timer interrupt), saves its complete state in the PCB, and loads the next process's state. This happens in milliseconds but adds overhead. IPC mechanisms allow cooperative processes to share data — shared memory is fastest (direct memory access) while pipes and message queues are simpler but slower. Understanding the process lifecycle, context switching, and IPC is foundational for OS interviews.
+
+EXAMPLE:
+Process State Transitions:
+  New → Ready (when OS admits the process)
+  Ready → Running (when CPU scheduler dispatches it)
+  Running → Waiting (when process requests I/O)
+  Waiting → Ready (when I/O completes)
+  Running → Ready (when time quantum expires — preemption)
+  Running → Terminated (when process calls exit())
+
+Fork() in Unix:
+  pid = fork()
+  if (pid == 0):
+    # This is the child process
+    exec("ls")  # Replace child with 'ls' program
+  else:
+    # This is the parent process
+    wait()  # Wait for child to finish
+
+  After fork(): both parent and child continue executing from the next line.
+  Parent gets pid = child's PID, child gets pid = 0.
+
+Context Switch Steps:
+  1. CPU timer interrupt fires → OS gains control
+  2. OS saves running process's registers, PC, and state into its PCB
+  3. OS selects next process from ready queue (scheduling)
+  4. OS loads selected process's PCB (registers, PC)
+  5. CPU resumes execution of new process
+
+INTERVIEW TIP:
+The key distinction to remember: a Process is heavyweight — it has its own memory space, file descriptors, and PCB. Creating/switching between processes is expensive. This is why Threads were introduced — multiple threads share the same process memory, making creation and context switching much cheaper. Always compare processes vs threads when discussing concurrency.

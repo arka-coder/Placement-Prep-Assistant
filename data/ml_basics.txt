@@ -1,0 +1,61 @@
+TOPIC: MACHINE LEARNING BASICS
+Category: Machine Learning (ML)
+
+DEFINITION:
+Machine Learning (ML) is a subfield of Artificial Intelligence (AI) where systems learn from data to identify patterns, make decisions, and improve performance over time — without being explicitly programmed with rules. Instead of hand-coding solutions, ML algorithms build a mathematical model from training data (experience) and use it to make predictions or decisions on new, unseen data.
+
+KEY CONCEPTS:
+- Training Data: The dataset used to teach the model (input features + expected output labels).
+- Test Data: A held-out dataset used to evaluate the model's performance on unseen data.
+- Validation Data: A separate dataset used to tune hyperparameters during training (separate from test data).
+- Features (X): The input variables/attributes used to make predictions (e.g., age, income, pixel values).
+- Labels (y): The output/target variable the model learns to predict (e.g., spam/not spam, house price).
+- Model: A mathematical function that maps input features to output predictions.
+- Training: The process of adjusting model parameters to minimize prediction error on training data.
+- Loss Function: Measures the difference between predicted and actual output. The model minimizes this during training (e.g., MSE for regression, Cross-Entropy for classification).
+- Optimization: Algorithms that minimize the loss function — most commonly Gradient Descent (iteratively adjusts parameters in the direction of steepest descent).
+- Hyperparameters: Settings configured before training that control the learning process (e.g., learning rate, number of layers, number of trees). Tuned via cross-validation.
+- Parameters: Values learned by the model during training (e.g., weights in a neural network, split thresholds in a decision tree).
+
+TYPES OF MACHINE LEARNING:
+- Supervised Learning: Training data has labeled examples. Goal: learn the mapping from X to y. Tasks: Classification (predict category) and Regression (predict continuous value).
+- Unsupervised Learning: Training data has no labels. Goal: discover hidden patterns. Tasks: Clustering, Dimensionality Reduction, Anomaly Detection.
+- Reinforcement Learning: An agent learns by interacting with an environment, receiving rewards or penalties. Goal: maximize cumulative reward. Used in game playing (AlphaGo), robotics, recommendation systems.
+- Semi-Supervised Learning: Small amount of labeled data + large amount of unlabeled data. Combines supervised and unsupervised approaches.
+
+EXPLANATION:
+Machine learning works by finding a function f such that f(X) ≈ y for all training examples. For regression, this might be a line (linear regression) or a complex non-linear function (neural network). For classification, the output is a category (logistic regression, SVM, decision tree). The learning process adjusts the model's parameters to minimize the difference between predictions and actual labels (the loss function). Gradient Descent is the workhorse optimization algorithm: it computes the gradient of the loss with respect to each parameter and updates parameters in the opposite direction (downhill). The learning rate controls the step size — too large causes oscillation, too small causes slow convergence. Real ML projects follow a pipeline: data collection → data preprocessing → feature engineering → model selection → training → evaluation → deployment.
+
+EXAMPLE:
+Supervised Learning — House Price Prediction:
+  Features (X): [size_sqft, num_bedrooms, location_score, age_of_house]
+  Label (y): price
+  Model: Linear Regression → price = w1*size + w2*bedrooms + w3*location + w4*age + bias
+  Training: Adjust w1, w2, w3, w4 to minimize MSE on training data.
+  Prediction: Given new house features → output predicted price.
+
+Classification — Email Spam Detection:
+  Features: word frequencies, sender reputation, email length
+  Label: spam (1) or not spam (0)
+  Model: Logistic Regression or Random Forest
+  Output: P(spam) = 0.92 → classify as SPAM
+
+Gradient Descent Update Rule:
+  For each parameter w:
+  w = w - learning_rate * (∂Loss/∂w)
+  Repeat until convergence (loss stops decreasing significantly).
+
+ML Pipeline Steps:
+  1. Data Collection: Gather raw data from databases, APIs, web scraping.
+  2. Data Preprocessing: Handle missing values, remove duplicates, encode categoricals.
+  3. Exploratory Data Analysis (EDA): Visualize distributions, correlations, outliers.
+  4. Feature Engineering: Create new features, scale/normalize features.
+  5. Model Selection: Choose algorithm based on data type and problem.
+  6. Training: Fit model on training data (minimize loss).
+  7. Evaluation: Measure performance on test data using appropriate metrics.
+  8. Hyperparameter Tuning: Use cross-validation to find optimal hyperparameters.
+  9. Deployment: Serve model as an API or integrate into product.
+  10. Monitoring: Track model performance and retrain when data drifts.
+
+INTERVIEW TIP:
+Key ML concepts every candidate should know: overfitting vs underfitting, bias-variance tradeoff, cross-validation, common evaluation metrics (accuracy, precision, recall, F1 for classification; MAE, RMSE for regression), and gradient descent. Be ready to compare at least 3-4 algorithms (logistic regression, decision tree, random forest, SVM, neural network) and explain when to use each.

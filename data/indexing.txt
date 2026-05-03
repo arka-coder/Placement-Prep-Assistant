@@ -1,0 +1,57 @@
+TOPIC: INDEXING
+Category: Database Management Systems (DBMS)
+
+DEFINITION:
+An Index is a data structure (typically a B-Tree or Hash Table) created on one or more columns of a database table to speed up data retrieval operations. Just like a book's index lets you jump directly to the right page, a database index lets the DBMS find rows quickly without scanning the entire table. Indexes trade additional storage space and slightly slower write operations for dramatically faster read queries.
+
+KEY CONCEPTS:
+- Full Table Scan: Without an index, the DBMS reads every row in the table to find matches — O(n). Extremely slow for large tables.
+- B-Tree Index: The most common index type. A self-balancing tree where all leaf nodes are at the same depth. Supports both exact match (=) and range queries (BETWEEN, <, >, ORDER BY). Time: O(log n). Used by MySQL InnoDB and PostgreSQL by default.
+- Hash Index: Uses a hash function for O(1) exact match lookups. Does NOT support range queries. Used in MySQL MEMORY tables.
+- Primary Index: Automatically created on the Primary Key column. Ensures uniqueness and orders the data.
+- Secondary Index (Non-clustered): Created on non-primary key columns. Stores a pointer to the actual row location.
+- Clustered Index: The actual table data is physically sorted according to this index. Only one per table. (In MySQL InnoDB, the Primary Key is always clustered.)
+- Non-Clustered Index: A separate structure that points to the actual row — the data remains in heap order.
+- Composite Index (Multi-Column): An index on two or more columns — follows the left-most prefix rule.
+- Unique Index: Enforces that all values in the indexed column are distinct (like a UNIQUE constraint).
+- Covering Index: An index that contains all columns needed by a query — the query is satisfied entirely from the index without touching the main table.
+- Index Selectivity: The ratio of distinct values to total rows. High selectivity (many distinct values) makes an index highly effective.
+
+EXPLANATION:
+Indexes are the single most impactful optimization for database query performance. A table with millions of rows can be queried in milliseconds with the right index, vs seconds without one. The B-Tree index structure allows the DBMS to binary search through sorted key values — finding any row in O(log n) time. However, every index adds overhead to INSERT, UPDATE, and DELETE operations because the index must be updated to reflect changes. Therefore, over-indexing (adding indexes on every column) hurts write performance and wastes storage. The key skill is identifying which columns are frequently used in WHERE, JOIN ON, ORDER BY, and GROUP BY clauses and creating targeted indexes on those. The Composite Index Left-Prefix Rule is a critical interview concept: an index on (A, B, C) can be used for queries filtering on A, A+B, or A+B+C, but NOT on B alone or C alone.
+
+EXAMPLE:
+Without Index:
+  SELECT * FROM Employees WHERE last_name = 'Smith';
+  → Full Table Scan: reads all 10 million rows → slow
+
+With Index on (last_name):
+  CREATE INDEX idx_lastname ON Employees(last_name);
+  → B-Tree lookup: finds 'Smith' in O(log n) → fast
+
+Composite Index Example:
+  CREATE INDEX idx_composite ON Orders(customer_id, order_date, status);
+
+  ✓ Uses index: WHERE customer_id = 5
+  ✓ Uses index: WHERE customer_id = 5 AND order_date > '2024-01-01'
+  ✓ Uses index: WHERE customer_id = 5 AND order_date > '2024-01-01' AND status = 'SHIPPED'
+  ✗ Does NOT use index: WHERE order_date > '2024-01-01' (skipped leading column customer_id)
+  ✗ Does NOT use index: WHERE status = 'SHIPPED' (skipped both leading columns)
+
+Avoid Index Bypass (Common Mistake):
+  ✗ Bad: WHERE YEAR(created_at) = 2024   ← function call bypasses index
+  ✓ Good: WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31'  ← uses index
+
+Covering Index Example:
+  Query: SELECT name, email FROM Users WHERE age = 25;
+  CREATE INDEX idx_covering ON Users(age, name, email);
+  → Index contains all columns needed → query resolved from index alone (no table access) → fastest possible
+
+When to Use Indexes:
+  - Columns frequently used in WHERE, JOIN ON, ORDER BY, GROUP BY
+  - Foreign key columns (always index these)
+  - Columns with high selectivity (e.g., email, user_id — not boolean columns like is_active)
+  - When table has many rows (> 10,000) and queries are frequent
+
+INTERVIEW TIP:
+EXPLAIN or EXPLAIN ANALYZE (in PostgreSQL/MySQL) shows the query execution plan — use it to verify your index is being used and to identify Sequential Scans (full table scans) that need indexes. Also remember: indexes on low-selectivity columns (e.g., gender with only 2 values) are often ignored by the optimizer because a full scan may be cheaper.

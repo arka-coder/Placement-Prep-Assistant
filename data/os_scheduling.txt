@@ -1,0 +1,63 @@
+TOPIC: CPU SCHEDULING
+Category: Operating Systems (OS)
+
+DEFINITION:
+CPU Scheduling is the OS mechanism that decides which process (or thread) from the ready queue gets allocated to the CPU at any given time. Since a CPU can only execute one process at a time (per core), the scheduler maximizes CPU utilization, throughput, and fairness while minimizing waiting time and response time. Scheduling is a fundamental OS function that directly impacts system performance and user experience.
+
+KEY CONCEPTS:
+- CPU Burst: The period a process spends doing computation (using CPU).
+- I/O Burst: The period a process spends waiting for I/O to complete.
+- Ready Queue: The queue of processes that are loaded in memory and waiting for CPU time.
+- Preemptive Scheduling: The OS can forcibly take the CPU away from a running process (e.g., when a higher-priority process arrives or time quantum expires).
+- Non-Preemptive Scheduling: Once a process starts executing, it runs until it completes or voluntarily yields (blocks for I/O or terminates).
+
+SCHEDULING ALGORITHMS:
+- FCFS (First-Come, First-Served): Non-preemptive. Processes are scheduled in order of arrival. Simple but suffers from the Convoy Effect (short processes wait behind a long process).
+- SJF (Shortest Job First): Non-preemptive. Process with shortest CPU burst runs first. Optimal average waiting time but requires knowing burst times in advance. Starvation of long processes.
+- SRTF (Shortest Remaining Time First): Preemptive version of SJF. If a new process arrives with a shorter remaining time than the current process, preempt. Optimal but high overhead.
+- Round Robin (RR): Preemptive. Each process gets a fixed time quantum (e.g., 10ms). After quantum expires, it's placed back in the ready queue. Fair but context-switch overhead.
+- Priority Scheduling: CPU assigned to highest-priority process. Can be preemptive or non-preemptive. Risk of starvation (low-priority processes never run). Fixed by Aging — gradually increase priority of waiting processes.
+- Multilevel Queue: Ready queue is divided into multiple queues (e.g., foreground/interactive, background/batch). Each queue has its own scheduling algorithm.
+- Multilevel Feedback Queue (MLFQ): Processes can move between queues based on behavior. CPU-intensive processes are demoted to lower-priority queues; I/O-bound processes are promoted. Most practical real-world scheduler (used in Windows and Unix).
+
+SCHEDULING METRICS:
+- Throughput: Number of processes completed per unit time (higher is better).
+- CPU Utilization: Percentage of time CPU is busy (target: 40-90%).
+- Turnaround Time: Total time from process submission to completion (arrival to finish).
+- Waiting Time: Total time a process spends in the ready queue.
+- Response Time: Time from request to first response (important for interactive systems).
+
+EXPLANATION:
+The choice of scheduling algorithm dramatically affects system performance and user experience. FCFS is the simplest but creates long queues when a CPU-intensive process runs first (Convoy Effect). SJF minimizes average waiting time but requires knowing future burst times — estimated using exponential averaging in practice. Round Robin is the most commonly used in time-sharing systems because it gives each process a fair share of the CPU and is responsive to interactive users. The time quantum size is critical — too small causes excessive context switching overhead, too large makes it behave like FCFS. Multilevel Feedback Queue (MLFQ) is the most sophisticated and practical: it adapts to process behavior dynamically, giving I/O-bound processes (which do short bursts) high priority and relegating long CPU-bound processes to lower-priority queues.
+
+EXAMPLE:
+Processes: P1 (arrival=0, burst=24), P2 (arrival=0, burst=3), P3 (arrival=0, burst=3)
+
+FCFS:
+  Gantt: [P1: 0-24] [P2: 24-27] [P3: 27-30]
+  Waiting Times: P1=0, P2=24, P3=27 → Average = 17ms
+
+SJF (Non-preemptive):
+  Shortest first: P2 (burst=3), then P3 (burst=3), then P1 (burst=24)
+  Gantt: [P2: 0-3] [P3: 3-6] [P1: 6-30]
+  Waiting Times: P1=6, P2=0, P3=3 → Average = 3ms (optimal!)
+
+Round Robin (Quantum = 4ms):
+  Gantt: [P1:0-4] [P2:4-7] [P3:7-10] [P1:10-14] [P1:14-18] [P1:18-22] [P1:22-26] [P1:26-30]
+  Waiting Times: P1=6, P2=4, P3=7 → Average = 5.67ms
+  More fair — P2 and P3 finish early
+
+Priority Scheduling (Priority: P1=3 (high), P2=1, P3=2):
+  Order: P1 → P3 → P2
+  Risk: If P1 has very high priority, P2 might never run (starvation)
+  Fix: Aging — if P2 waits for 10+ minutes, increase its priority
+
+INTERVIEW TIP:
+Know all algorithms, their metrics, and tradeoffs:
+- FCFS: Simple, Convoy effect problem.
+- SJF: Optimal waiting time, needs future knowledge, starvation.
+- SRTF: Preemptive SJF, optimal but high overhead.
+- Round Robin: Fair, good response time, quantum size critical.
+- Priority: Flexible, starvation risk, fixed by aging.
+- MLFQ: Best real-world algorithm, adaptive to process behavior.
+Turnaround Time = Completion Time - Arrival Time. Waiting Time = Turnaround Time - Burst Time.

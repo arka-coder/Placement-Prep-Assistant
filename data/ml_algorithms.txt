@@ -1,0 +1,95 @@
+TOPIC: COMMON MACHINE LEARNING ALGORITHMS
+Category: Machine Learning (ML)
+
+DEFINITION:
+Machine learning algorithms are mathematical models and optimization procedures that learn patterns from data to make predictions or decisions. Different algorithms have different assumptions, strengths, and weaknesses — choosing the right algorithm depends on the data size, data type (structured vs unstructured), problem type (classification, regression, clustering), interpretability requirements, and computational constraints.
+
+KEY CONCEPTS AND ALGORITHMS:
+
+--- 1. LINEAR REGRESSION ---
+Definition: Models the relationship between continuous target y and features X as a linear equation: y = w₁x₁ + w₂x₂ + ... + b. Minimizes Mean Squared Error (MSE) using Ordinary Least Squares or Gradient Descent.
+Key Properties: Simple, interpretable, fast. Assumes linearity, independence of errors, homoscedasticity.
+When to Use: Predicting continuous values (house prices, salary, temperature). Features have linear relationship with target.
+Limitation: Cannot capture non-linear relationships.
+
+--- 2. LOGISTIC REGRESSION ---
+Definition: Classification algorithm (despite the name) that predicts P(class=1) using sigmoid function: σ(z) = 1/(1+e^(-z)) where z = w·x + b. Trained by minimizing Binary Cross-Entropy loss.
+Key Properties: Simple, interpretable, outputs probabilities, works well when classes are linearly separable.
+When to Use: Binary classification (spam/not spam, churn/no churn), when interpretability is needed.
+Limitation: Cannot capture non-linear decision boundaries (use kernel trick or neural networks for that).
+
+--- 3. DECISION TREE ---
+Definition: A tree-structured model that makes decisions by splitting data based on feature thresholds, recursively partitioning the feature space into regions with similar labels. Splits are chosen to maximize information gain (or minimize Gini impurity).
+Key Properties: Highly interpretable (visual), handles both numerical and categorical features, no feature scaling needed.
+Gini Impurity: Measures impurity of a node — Gini = 1 - Σ(pᵢ²). Lower is better (purer).
+Information Gain: Entropy reduction from a split. Choose split that maximizes information gain.
+When to Use: When interpretability is critical (medical diagnosis, rule extraction).
+Limitation: Prone to overfitting, unstable (small data changes cause different trees). Fixed by Random Forest.
+
+--- 4. RANDOM FOREST ---
+Definition: An ensemble of decision trees where each tree is trained on a random subset of training data (bootstrap sampling) and a random subset of features. Final prediction is by majority vote (classification) or average (regression). Uses Bagging (Bootstrap Aggregating).
+Key Properties: Highly accurate, robust to overfitting (averaging reduces variance), handles missing values, built-in feature importance.
+When to Use: General-purpose algorithm for structured/tabular data. Excellent default choice.
+Limitation: Less interpretable than a single decision tree, slower for large forests.
+
+--- 5. SUPPORT VECTOR MACHINE (SVM) ---
+Definition: Finds the optimal hyperplane that maximally separates two classes with the largest possible margin. Support Vectors are the data points closest to the decision boundary. The Kernel Trick enables SVM to handle non-linearly separable data by transforming features into a higher-dimensional space.
+Key Properties: Effective in high-dimensional spaces, robust to outliers, effective when margin is clear.
+Kernels: Linear (linearly separable), RBF/Gaussian (non-linear), Polynomial, Sigmoid.
+When to Use: Text classification, image classification, small-to-medium datasets.
+Limitation: Slow on large datasets, sensitive to feature scaling, kernel and C hyperparameter selection is tricky.
+
+--- 6. K-NEAREST NEIGHBORS (k-NN) ---
+Definition: A non-parametric, lazy learning algorithm that classifies a new point based on the majority vote of its k nearest training points (by distance — Euclidean, Manhattan). For regression, averages the k nearest neighbors' values.
+Key Properties: Simple, no training phase, naturally handles multi-class problems.
+When to Use: Small datasets, non-linear decision boundaries, recommendation systems.
+Limitation: Slow at prediction time O(n*d), sensitive to irrelevant features and scale, high memory usage. Feature scaling mandatory.
+
+--- 7. K-MEANS CLUSTERING ---
+Definition: Unsupervised algorithm that partitions n data points into k clusters by iteratively assigning each point to the nearest centroid and recalculating centroids until convergence.
+Algorithm Steps: (1) Initialize k centroids randomly. (2) Assign each point to nearest centroid. (3) Recalculate centroids as mean of assigned points. (4) Repeat 2-3 until centroids don't move significantly.
+When to Use: Customer segmentation, document clustering, image compression.
+Limitation: Must specify k in advance, sensitive to initialization (use k-means++ for better initialization), assumes spherical clusters of similar size.
+
+--- 8. GRADIENT BOOSTING (XGBoost, LightGBM) ---
+Definition: Ensemble method that builds trees sequentially — each new tree corrects the residual errors of the previous trees. Combines many weak learners (shallow trees) into one strong learner by boosting.
+Key Properties: State-of-the-art for structured data, handles missing values, built-in L1/L2 regularization in XGBoost, faster than Random Forest on large datasets.
+When to Use: Competitive machine learning, tabular data, ranking problems, when maximum predictive accuracy needed.
+Limitation: Many hyperparameters to tune, black box (less interpretable), computationally intensive.
+
+--- 9. NAIVE BAYES ---
+Definition: A probabilistic classifier based on Bayes' Theorem, assuming all features are conditionally independent given the class (the "naive" assumption). P(class|features) ∝ P(class) × P(f1|class) × P(f2|class) × ...
+When to Use: Text classification (spam detection, sentiment analysis), very fast and efficient.
+Limitation: Feature independence assumption rarely holds in practice, but often works surprisingly well.
+
+--- ALGORITHM SELECTION GUIDE ---
+Problem Type    | Algorithm Recommendations
+Regression      | Linear Regression, Decision Tree, Random Forest, XGBoost
+Classification  | Logistic Regression, SVM, Random Forest, XGBoost, Neural Networks
+Clustering      | K-Means, DBSCAN, Hierarchical Clustering
+Text/NLP        | Naive Bayes, Logistic Regression, Transformers
+Large Datasets  | SGD variants, LightGBM, Neural Networks
+Small Datasets  | SVM, k-NN, Naive Bayes
+High Accuracy   | XGBoost, LightGBM, Neural Networks, Stacked Ensembles
+Interpretability| Linear/Logistic Regression, Decision Tree, Rule-based
+
+EXAMPLE:
+Decision Tree Split on House Prices:
+  Feature: size_sqft
+  Split: size_sqft ≤ 1500?
+    YES branch: average price = $250,000 (small houses)
+    NO branch:  average price = $450,000 (large houses)
+  Gini before split: 0.48 (mixed)
+  Gini after split: 0.21 (purer)
+  Information Gain = 0.48 - 0.21 = 0.27 → Good split!
+
+k-NN for Classification:
+  Query point: x = [5.0, 3.5] (unknown class)
+  k=3, nearest neighbors found by Euclidean distance:
+    Neighbor 1: [4.9, 3.2] → Class A
+    Neighbor 2: [5.1, 3.8] → Class A
+    Neighbor 3: [4.8, 3.0] → Class B
+  Majority vote: 2 Class A vs 1 Class B → Classify as Class A
+
+INTERVIEW TIP:
+Be prepared to compare at least 3-4 algorithms on accuracy, interpretability, training speed, and scalability. Key comparisons: Logistic Regression vs SVM (both linear classifiers, SVM maximizes margin), Random Forest vs XGBoost (both ensembles: RF uses bagging, XGBoost uses boosting), Decision Tree vs Random Forest (RF reduces variance via averaging). Always mention the "no free lunch" theorem: no single algorithm is best for all problems.

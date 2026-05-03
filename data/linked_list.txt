@@ -1,0 +1,52 @@
+TOPIC: LINKED LIST
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+A Linked List is a linear data structure where elements (called nodes) are stored in non-contiguous memory locations. Each node contains two parts: the data value and a pointer (or reference) to the next node in the sequence. Unlike arrays, linked lists do not support random access but excel at dynamic insertions and deletions.
+
+KEY CONCEPTS:
+- Node: The basic unit — stores data and a pointer to the next node.
+- Head: Pointer to the first node in the list. Tail: pointer to the last node (which points to NULL).
+- Singly Linked List: Each node points only to the next node (one direction traversal).
+- Doubly Linked List: Each node has two pointers — next (forward) and prev (backward). Allows bidirectional traversal.
+- Circular Linked List: The last node points back to the head, forming a loop. Used in round-robin scheduling.
+- Insertion at Head: O(1) — update head pointer only. Insertion at Tail: O(n) without a tail pointer, O(1) with one.
+- Deletion: O(1) if pointer to previous node is known; O(n) if searching for the node first.
+- Search: O(n) — must traverse from head (no random access by index).
+- Two-Pointer (Fast/Slow): Floyd's Cycle Detection algorithm — one pointer moves 1 step, the other moves 2 steps.
+
+EXPLANATION:
+Linked lists solve the fixed-size and costly insertion/deletion problems of arrays. Because nodes are dynamically allocated, the list can grow or shrink at runtime without wasting memory. However, this comes at the cost of extra memory for pointers and the inability to access elements by index (O(n) search). In a doubly linked list, deletion of any node is O(1) if the node reference is known directly, because both previous and next pointers are available — this is why doubly linked lists are used to implement LRU Cache (combined with a hash map for O(1) lookup). The fast/slow pointer trick is the key technique for cycle detection, finding the middle of a list, and detecting the start of a cycle.
+
+EXAMPLE:
+Linked List: 1 → 2 → 3 → 4 → 5 → NULL
+
+Reverse a Linked List (Iterative):
+  prev = NULL, curr = head (node 1)
+  Step 1: curr.next = prev (NULL), prev = node1, curr = node2
+  Step 2: curr.next = prev (node1), prev = node2, curr = node3
+  ... continue until curr = NULL
+  New head = prev (node5)
+  Result: 5 → 4 → 3 → 2 → 1 → NULL
+  Time: O(n), Space: O(1)
+
+Detect Cycle (Floyd's Algorithm):
+  slow = head, fast = head
+  While fast and fast.next are not NULL:
+    slow = slow.next (1 step)
+    fast = fast.next.next (2 steps)
+    If slow == fast: CYCLE DETECTED
+
+Find Middle:
+  Use slow/fast pointer — when fast reaches end, slow is at middle.
+
+Common Interview Problems:
+- Reverse a linked list (iterative and recursive)
+- Detect and find start of cycle
+- Merge two sorted linked lists
+- Find the nth node from end (two-pointer with gap of n)
+- Check if linked list is a palindrome
+- Clone linked list with random pointer
+
+INTERVIEW TIP:
+Most linked list problems are solved with the two-pointer technique. Before coding, always draw the pointer manipulation on paper — it's easy to lose track of pointers and create null pointer errors. Edge cases: empty list, single node, cycle in list.

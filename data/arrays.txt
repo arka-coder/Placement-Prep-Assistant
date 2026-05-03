@@ -1,0 +1,39 @@
+TOPIC: ARRAYS
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+An array is a linear data structure that stores a fixed-size, ordered collection of elements of the same data type in contiguous memory locations. Each element is accessed using a zero-based index. Arrays are the most fundamental data structure in computer science and form the foundation for many other structures like stacks, queues, and heaps.
+
+KEY CONCEPTS:
+- Indexing: Elements are accessed in O(1) time using their index (e.g., arr[0], arr[n-1]).
+- Fixed Size: In static arrays (C/C++), size is declared at creation and cannot change. Dynamic arrays (Python lists, Java ArrayLists) resize automatically.
+- Contiguous Memory: All elements are stored next to each other in memory, enabling efficient cache usage and O(1) random access.
+- Traversal: Visiting every element takes O(n) time.
+- Insertion/Deletion: O(n) in worst case because elements must be shifted. Inserting/deleting at the end is O(1) amortized.
+- Two-Pointer Technique: Using two indices (left and right) moving toward each other — solves problems like reversing, finding pairs with a sum.
+- Sliding Window: A fixed or variable-size window that slides across the array — solves subarray sum, maximum subarray problems efficiently.
+- Prefix Sum: A precomputed array where prefix[i] = sum of elements from index 0 to i. Enables O(1) range sum queries.
+
+EXPLANATION:
+Arrays are the simplest and most widely used data structure. Because elements are stored in contiguous memory, the CPU cache loads nearby elements together, making array traversal extremely fast. The key tradeoff is that while reading any element by index is O(1), inserting or deleting from the middle requires shifting all subsequent elements, making those operations O(n). Dynamic arrays (like Python's list or Java's ArrayList) solve the fixed-size problem by automatically doubling their capacity when full — this makes amortized append O(1) but with occasional O(n) resizing cost. For interview problems, mastering the two-pointer and sliding window techniques on arrays is critical, as they convert naive O(n²) solutions into O(n) solutions.
+
+EXAMPLE:
+Problem: Find the maximum sum subarray of size k.
+Array: [2, 1, 5, 1, 3, 2], k = 3
+Naive O(n*k): Check all windows → O(n²)
+Sliding Window O(n):
+  - First window sum = 2+1+5 = 8
+  - Slide: subtract arr[0]=2, add arr[3]=1 → sum = 7
+  - Slide: subtract arr[1]=1, add arr[4]=3 → sum = 9
+  - Slide: subtract arr[2]=5, add arr[5]=2 → sum = 6
+  Answer: Maximum sum = 9
+
+Common Interview Problems:
+- Two Sum (use hash map for O(n))
+- Maximum subarray (Kadane's Algorithm — O(n) DP)
+- Rotate array by k positions
+- Merge two sorted arrays
+- Find duplicate in array
+
+INTERVIEW TIP:
+Always ask about sorted vs unsorted, distinct vs duplicate elements, and positive vs negative values before coding. Many array problems have an O(n²) brute-force and an O(n) or O(n log n) optimal solution using two-pointer, sliding window, or sorting.

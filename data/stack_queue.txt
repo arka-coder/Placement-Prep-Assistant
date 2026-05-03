@@ -1,0 +1,62 @@
+TOPIC: STACK AND QUEUE
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+A Stack is a linear data structure that follows the Last In First Out (LIFO) principle — the element inserted last is removed first, like a stack of plates. A Queue is a linear data structure that follows the First In First Out (FIFO) principle — the element inserted first is removed first, like a line at a counter. Both are fundamental structures used to manage ordered data with restricted access.
+
+KEY CONCEPTS:
+STACK:
+- Push: Insert element on top — O(1)
+- Pop: Remove element from top — O(1)
+- Peek/Top: View top element without removing — O(1)
+- isEmpty: Check if stack is empty — O(1)
+- Implementation: Array-based (fixed size) or Linked List-based (dynamic size)
+- Use Cases: Function call stack, undo/redo, expression evaluation, backtracking, DFS traversal
+
+QUEUE:
+- Enqueue: Insert at rear — O(1)
+- Dequeue: Remove from front — O(1)
+- Peek/Front: View front element — O(1)
+- Circular Queue: Wraps around to reuse space left by dequeued elements
+- Priority Queue: Elements are dequeued by priority, not insertion order (implemented with a heap)
+- Deque (Double-Ended Queue): Supports insert and delete at both ends
+- Use Cases: BFS traversal, CPU/disk scheduling, print spooling, cache eviction
+
+EXPLANATION:
+Stacks and queues are foundational abstract data types (ADTs) that restrict how data is accessed. A stack enforces LIFO — only the top is ever accessible, making it perfect for problems involving nested structures (matching parentheses, evaluating expressions, recursion simulation). A queue enforces FIFO — ideal for level-by-level processing, such as BFS in graphs and trees. Circular queues are important because a simple array-based queue wastes space after dequeue operations — the circular design reuses freed positions. Priority queues, built on min-heaps or max-heaps, are critical for Dijkstra's shortest path algorithm and event scheduling systems where not all elements have equal priority.
+
+EXAMPLE:
+Stack — Balanced Parentheses Checker:
+  Input: "({[]})"
+  Process each character:
+    '(' → push → stack: ['(']
+    '{' → push → stack: ['(', '{']
+    '[' → push → stack: ['(', '{', '[']
+    ']' → top is '[' → match! → pop → stack: ['(', '{']
+    '}' → top is '{' → match! → pop → stack: ['(']
+    ')' → top is '(' → match! → pop → stack: []
+  Stack empty at end → BALANCED ✓
+
+Queue — BFS Level-Order Traversal (Tree):
+  Start: enqueue root → queue: [root]
+  Step 1: dequeue root, print it, enqueue left & right children
+  Step 2: dequeue left child, enqueue its children
+  Step 3: dequeue right child, enqueue its children
+  Continue until queue is empty → visits all nodes level by level
+
+Monotonic Stack (Advanced):
+  Used to find the Next Greater Element for each element in O(n):
+  Array: [2, 1, 5, 3, 6]
+  For each element, pop stack elements smaller than it → they found their NGE.
+  Result: [5, 5, 6, 6, -1]
+
+Common Interview Problems:
+- Implement a Queue using two Stacks
+- Implement a Stack using two Queues
+- Evaluate postfix expressions
+- Next Greater Element (Monotonic Stack)
+- Largest Rectangle in Histogram (Stack)
+- Sliding Window Maximum (Deque)
+
+INTERVIEW TIP:
+When you see problems involving "nearest greater/smaller element" or "process in order of arrival," think stacks and queues respectively. The monotonic stack pattern solves several hard array problems in O(n) by maintaining a stack of elements in sorted order.

@@ -1,0 +1,60 @@
+TOPIC: DBMS BASICS
+Category: Database Management Systems (DBMS)
+
+DEFINITION:
+A Database Management System (DBMS) is software that enables users to create, read, update, and delete data in a structured, organized, and secure manner. It acts as an intermediary between the user/application and the physical database. A Relational DBMS (RDBMS) organizes data into tables (relations) with rows and columns, and uses SQL to interact with the data.
+
+KEY CONCEPTS:
+- Database: An organized collection of structured data stored electronically.
+- DBMS: Software (e.g., MySQL, PostgreSQL, Oracle) that manages the database and provides an interface for data operations.
+- Table (Relation): Data organized in rows (tuples/records) and columns (attributes/fields).
+- Primary Key: A column (or combination of columns) that uniquely identifies each row in a table. Cannot be NULL.
+- Foreign Key: A column that references the Primary Key of another table — enforces referential integrity.
+- Schema: The structure/blueprint of the database — defines tables, columns, data types, and relationships.
+- SQL (Structured Query Language): The standard language for managing relational databases.
+- CRUD Operations: Create (INSERT), Read (SELECT), Update (UPDATE), Delete (DELETE).
+- Data Independence: The ability to change schema at one level without affecting other levels (physical vs logical independence).
+- Three-Schema Architecture: External schema (user view), Conceptual schema (logical structure), Internal schema (physical storage).
+- NoSQL vs SQL: SQL databases use structured tables and ACID transactions. NoSQL (MongoDB, Cassandra, Redis) uses flexible schemas (documents, key-value, graph) and trades ACID for scalability.
+
+EXPLANATION:
+A DBMS provides several critical advantages over flat-file storage: data independence (application code doesn't need to change when storage format changes), data consistency (constraints prevent invalid data), concurrent access management (multiple users can safely access data simultaneously), and security (access control, authentication). The RDBMS model, based on set theory and relational algebra, has dominated enterprise applications for decades. SQL is the universal language for relational databases — learning it well is non-negotiable for software engineering roles. Modern systems often combine RDBMS (for transactional data) with NoSQL (for high-throughput, flexible data) in a polyglot persistence approach.
+
+EXAMPLE:
+Simple Library Database:
+  Table: Books
+  | BookID | Title          | AuthorID | Genre    |
+  |--------|----------------|----------|----------|
+  | 1      | Clean Code     | 101      | Tech     |
+  | 2      | The Pragmatist | 102      | Tech     |
+
+  Table: Authors
+  | AuthorID | Name          |
+  |----------|---------------|
+  | 101      | Robert Martin |
+  | 102      | Dave Thomas   |
+
+  BookID is Primary Key of Books.
+  AuthorID in Books is a Foreign Key referencing Authors(AuthorID).
+
+  SQL Query: Find all Tech books with their author names:
+  SELECT b.Title, a.Name
+  FROM Books b
+  JOIN Authors a ON b.AuthorID = a.AuthorID
+  WHERE b.Genre = 'Tech';
+
+  Result:
+  | Title          | Name          |
+  |----------------|---------------|
+  | Clean Code     | Robert Martin |
+  | The Pragmatist | Dave Thomas   |
+
+Common DBMS Interview Questions:
+- What is the difference between SQL and NoSQL?
+- What are the different types of keys in a database?
+- What is data integrity and how is it maintained?
+- Explain the three-schema architecture.
+- What is the difference between DBMS and RDBMS?
+
+INTERVIEW TIP:
+Know the difference between DDL (Data Definition Language: CREATE, ALTER, DROP — defines structure), DML (Data Manipulation Language: INSERT, UPDATE, DELETE, SELECT — manipulates data), DCL (Data Control Language: GRANT, REVOKE — controls access), and TCL (Transaction Control Language: COMMIT, ROLLBACK, SAVEPOINT — manages transactions).

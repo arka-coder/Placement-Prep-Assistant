@@ -1,0 +1,95 @@
+TOPIC: SQL (Structured Query Language)
+Category: Database Management Systems (DBMS)
+
+DEFINITION:
+SQL (Structured Query Language) is the standard language used to interact with relational databases. It is used to define database structures (DDL), manipulate and query data (DML), control access permissions (DCL), and manage transactions (TCL). SQL is declarative — you describe what you want, not how to get it, and the database engine figures out the most efficient execution plan.
+
+KEY CONCEPTS:
+- SELECT: Retrieves data from one or more tables. Most fundamental SQL statement.
+- WHERE: Filters rows before grouping or aggregation.
+- GROUP BY: Groups rows with the same value in specified columns for aggregation.
+- HAVING: Filters groups after aggregation (like WHERE but for grouped results).
+- ORDER BY: Sorts the result set (ASC default, DESC for descending).
+- LIMIT / OFFSET: Pagination — LIMIT n returns first n rows, OFFSET skips n rows.
+- DISTINCT: Removes duplicate rows from result set.
+- Aggregate Functions: COUNT(), SUM(), AVG(), MIN(), MAX() — operate on groups of rows.
+- Subquery: A query nested inside another query. Can be in WHERE, FROM, or SELECT clause.
+- CTE (Common Table Expression): A named temporary result set defined using WITH — improves readability for complex queries.
+- Window Functions: Perform calculations across a set of rows related to the current row (RANK(), ROW_NUMBER(), LAG(), LEAD(), SUM() OVER). Do NOT collapse rows like GROUP BY.
+- JOINS: Combine rows from two or more tables based on a related column.
+  - INNER JOIN: Returns only rows with matching values in both tables.
+  - LEFT JOIN: All rows from left table + matched rows from right (NULL for unmatched).
+  - RIGHT JOIN: All rows from right table + matched rows from left (NULL for unmatched).
+  - FULL OUTER JOIN: All rows from both tables (NULL for unmatched on either side).
+  - CROSS JOIN: Cartesian product — every row of left paired with every row of right.
+  - SELF JOIN: A table joined with itself (for hierarchical data like employee-manager).
+- Index: Data structure for fast retrieval (B-Tree for range, Hash for exact match).
+- View: A virtual table representing a stored query — simplifies complex queries, adds security layer.
+
+EXPLANATION:
+SQL is the most important technical skill for database interviews. Mastering the order of SQL execution is critical: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT. This order determines what data is available at each clause — e.g., you cannot use an alias defined in SELECT inside WHERE (because WHERE executes before SELECT). Joins are the heart of relational databases — understanding the difference between INNER, LEFT, and RIGHT joins, and when each produces NULL values, is a fundamental interview requirement. Window functions (RANK, ROW_NUMBER, LAG, LEAD) are advanced but increasingly tested in data engineering and analyst roles — they allow per-row calculations without collapsing the result set like GROUP BY does.
+
+EXAMPLE:
+Schema: Employees(id, name, salary, department_id), Departments(id, name)
+
+Basic Aggregation:
+  SELECT department_id, COUNT(*) AS emp_count, AVG(salary) AS avg_salary
+  FROM Employees
+  GROUP BY department_id
+  HAVING AVG(salary) > 50000
+  ORDER BY avg_salary DESC;
+
+Second Highest Salary (Classic Interview Question):
+  Method 1 (Subquery):
+    SELECT MAX(salary) FROM Employees
+    WHERE salary < (SELECT MAX(salary) FROM Employees);
+
+  Method 2 (LIMIT/OFFSET):
+    SELECT DISTINCT salary FROM Employees
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1;
+
+  Method 3 (Window Function — Nth highest general):
+    SELECT salary FROM (
+      SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+      FROM Employees
+    ) ranked
+    WHERE rnk = 2;
+
+Find Employees Earning More Than Their Manager (Self Join):
+  SELECT e.name AS Employee, m.name AS Manager
+  FROM Employees e
+  JOIN Employees m ON e.manager_id = m.id
+  WHERE e.salary > m.salary;
+
+Departments With No Employees (LEFT JOIN + NULL check):
+  SELECT d.name
+  FROM Departments d
+  LEFT JOIN Employees e ON d.id = e.department_id
+  WHERE e.id IS NULL;
+
+Window Functions (Running Total and Rank):
+  SELECT name, salary, department_id,
+    RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS dept_rank,
+    SUM(salary) OVER (PARTITION BY department_id ORDER BY salary) AS running_total
+  FROM Employees;
+
+CTE Example (Readable multi-step query):
+  WITH DeptStats AS (
+    SELECT department_id, AVG(salary) AS avg_sal
+    FROM Employees
+    GROUP BY department_id
+  )
+  SELECT e.name, e.salary, d.avg_sal
+  FROM Employees e
+  JOIN DeptStats d ON e.department_id = d.department_id
+  WHERE e.salary > d.avg_sal;
+
+Common SQL Interview Queries:
+- Duplicate records: SELECT name, COUNT(*) FROM Employees GROUP BY name HAVING COUNT(*) > 1
+- Delete duplicates keeping latest: DELETE FROM Employees WHERE id NOT IN (SELECT MAX(id) FROM Employees GROUP BY name)
+- Consecutive seats: Self join or LAG/LEAD window function
+- Employees hired in last 30 days: WHERE hire_date >= NOW() - INTERVAL '30 days'
+
+INTERVIEW TIP:
+SQL execution order is key: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. Remember: WHERE filters before aggregation, HAVING filters after. Window functions (RANK, ROW_NUMBER, DENSE_RANK, LAG, LEAD) are powerful — RANK leaves gaps for ties (1,2,2,4), DENSE_RANK does not (1,2,2,3), ROW_NUMBER assigns unique numbers regardless of ties.

@@ -1,0 +1,54 @@
+TOPIC: TRANSACTIONS AND ACID PROPERTIES
+Category: Database Management Systems (DBMS)
+
+DEFINITION:
+A Transaction is a sequence of one or more database operations (read, write, update, delete) executed as a single logical unit of work. Either all operations in the transaction complete successfully (commit), or none of them take effect (rollback). Transactions are governed by ACID properties — Atomicity, Consistency, Isolation, and Durability — which guarantee reliable behavior even in the presence of failures, concurrent access, and system crashes.
+
+KEY CONCEPTS:
+- Atomicity: A transaction is all-or-nothing. If any step fails, the entire transaction is rolled back to its original state.
+- Consistency: A transaction transforms the database from one valid state to another. All rules, constraints, and cascades are respected.
+- Isolation: Concurrent transactions execute as if they were serial (one at a time). Intermediate states of a transaction are invisible to others.
+- Durability: Once committed, the transaction's changes are permanent and survive system crashes (achieved via Write-Ahead Logging).
+- Commit: Permanently saves all changes made in the transaction.
+- Rollback: Undoes all changes made in the transaction, restoring the previous state.
+- Savepoint: A marker within a transaction allowing partial rollback to that point.
+- Isolation Levels: Configurable trade-offs between data consistency and performance (Read Uncommitted < Read Committed < Repeatable Read < Serializable).
+- Concurrency Problems: Dirty Read, Non-Repeatable Read, Phantom Read — different isolation levels prevent different problems.
+- Locking: Shared (Read) Lock — multiple readers allowed; Exclusive (Write) Lock — only one writer at a time.
+- MVCC (Multi-Version Concurrency Control): Maintains multiple versions of data — readers don't block writers and vice versa. Used in PostgreSQL and MySQL InnoDB.
+
+EXPLANATION:
+Transactions are the foundation of data integrity in multi-user database systems. Without transactions, partial updates due to crashes could leave data in an inconsistent state — for example, deducting money from one account but crashing before crediting another. ACID properties prevent this. Atomicity is implemented via the transaction log — on crash, the database replays committed transactions and rolls back incomplete ones. Isolation is the most nuanced property: stricter isolation improves consistency but reduces concurrency (more locking/waiting). The four isolation levels allow DBAs to tune this tradeoff. A deadlock occurs when two transactions each hold a lock the other needs — the DBMS detects this via a wait-for graph and kills one transaction to break the cycle.
+
+EXAMPLE:
+Bank Transfer Transaction (Classic ACID Example):
+  BEGIN TRANSACTION;
+    UPDATE Accounts SET balance = balance - 500 WHERE id = 1;  -- Debit Alice
+    UPDATE Accounts SET balance = balance + 500 WHERE id = 2;  -- Credit Bob
+  COMMIT;
+
+  Atomicity: If the system crashes after debit but before credit, rollback restores Alice's balance.
+  Consistency: Account balances cannot go negative (constraint enforced). Total money is preserved.
+  Isolation: Another transaction reading Bob's balance during this transaction sees either the old value (no effect) or the new value (after commit) — never the intermediate state.
+  Durability: After COMMIT, even if the server crashes immediately after, the transfer is permanent.
+
+Isolation Levels and What They Prevent:
+  | Isolation Level   | Dirty Read | Non-Repeatable Read | Phantom Read |
+  |-------------------|------------|---------------------|--------------|
+  | Read Uncommitted  | Possible   | Possible            | Possible     |
+  | Read Committed    | Prevented  | Possible            | Possible     |
+  | Repeatable Read   | Prevented  | Prevented           | Possible     |
+  | Serializable      | Prevented  | Prevented           | Prevented    |
+
+Concurrency Problem Examples:
+  Dirty Read: Transaction A reads data written by uncommitted Transaction B. If B rolls back, A has invalid data.
+  Non-Repeatable Read: Transaction A reads a row, Transaction B updates it, A reads it again and gets a different value.
+  Phantom Read: Transaction A queries rows with WHERE age > 20, Transaction B inserts a new row matching this condition, A queries again and sees a new "phantom" row.
+
+Deadlock Example:
+  T1 holds Lock on Table A, waits for Lock on Table B.
+  T2 holds Lock on Table B, waits for Lock on Table A.
+  Deadlock! DBMS detects cycle in wait-for graph and aborts one transaction.
+
+INTERVIEW TIP:
+Most SQL databases default to Read Committed (PostgreSQL) or Repeatable Read (MySQL InnoDB). Know which anomaly each isolation level prevents. For distributed systems, mention that strict ACID across distributed nodes is expensive — many distributed databases use BASE (Basically Available, Soft state, Eventually consistent) and the CAP theorem trade-offs.

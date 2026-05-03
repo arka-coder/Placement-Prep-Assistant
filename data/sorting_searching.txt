@@ -1,0 +1,60 @@
+TOPIC: SORTING AND SEARCHING
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+Sorting is the process of arranging elements in a specific order (ascending or descending). Searching is the process of finding a specific element within a data structure. Both are foundational operations in computer science and appear in almost every algorithm and software system. Efficient sorting and searching are critical for performance optimization.
+
+KEY CONCEPTS:
+SORTING ALGORITHMS:
+- Bubble Sort: Repeatedly swap adjacent elements if out of order. O(n²) time, O(1) space. Stable. Only useful for nearly sorted data.
+- Selection Sort: Find the minimum element and place it in its correct position. O(n²) time, O(1) space. Not stable. Simple but inefficient.
+- Insertion Sort: Build a sorted subarray by inserting each element in its correct position. O(n²) worst, O(n) best (nearly sorted). Stable. Used in practice for small arrays.
+- Merge Sort: Divide array in half, sort each half recursively, merge. O(n log n) always. O(n) space. Stable. Best for linked lists and external sorting.
+- Quick Sort: Pick a pivot, partition array into elements < pivot and > pivot, sort recursively. O(n log n) average, O(n²) worst (bad pivot). O(log n) space. Not stable. Fastest in practice due to cache efficiency.
+- Heap Sort: Build a max-heap, repeatedly extract maximum. O(n log n) always. O(1) space. Not stable. In-place but not cache-friendly.
+- Counting Sort: Count occurrences of each element. O(n+k) time where k is range. O(k) space. Stable. Only for non-negative integers with small range.
+- Radix Sort: Sort digit by digit from least to most significant. O(d*(n+b)) where d=digits, b=base. Stable. Best for large n with small key range.
+
+SEARCHING ALGORITHMS:
+- Linear Search: Check each element one by one. O(n) time. Works on unsorted data.
+- Binary Search: Repeatedly halve the search space. O(log n) time. Requires sorted data. Space: O(1) iterative, O(log n) recursive.
+- Binary Search on Answer: Apply binary search on the answer space (value range), not the array — used when the answer is monotonic.
+
+EXPLANATION:
+Understanding sorting algorithm properties is essential for selecting the right one. Stability means equal elements maintain their relative original order — critical when sorting records by multiple keys (e.g., sort students by grade, then by name). Quick Sort is fastest in practice (best cache performance) but has O(n²) worst case for already-sorted data with naive pivot selection — fixed by using random pivot or median-of-three. Merge Sort is preferred for linked lists (no random access needed) and external sorting (data too large for RAM). Binary search is the most important searching technique — its O(log n) time makes it 10x faster than linear search for n=1 billion. The key insight: binary search works whenever the search space is monotonic — not just sorted arrays, but any problem where you can determine "is the answer too big or too small?"
+
+EXAMPLE:
+Merge Sort — [64, 25, 12, 22, 11]:
+  Divide: [64, 25, 12] and [22, 11]
+  Divide: [64] [25, 12] and [22] [11]
+  Divide: [64] [25] [12] [22] [11]
+  Merge: [25, 64] ... [12] → [12, 25, 64] and [11, 22]
+  Merge: [11, 12, 22, 25, 64]
+  Time: O(n log n), Space: O(n)
+
+Binary Search — Find 22 in [11, 12, 22, 25, 64]:
+  low=0, high=4, mid=2 → arr[2]=22 == 22 → FOUND at index 2 ✓
+
+Binary Search on Answer — "Find minimum capacity to ship packages in D days":
+  Answer is in range [max(weights), sum(weights)]
+  For each mid value, check if packages can be shipped in D days
+  Adjust low/high based on whether mid is feasible → O(n log(sum-max))
+
+Quick Sort Partition (Lomuto scheme):
+  Array: [3, 1, 4, 1, 5, 9, 2, 6], pivot = 6 (last element)
+  i = -1, scan from left to right
+  Elements ≤ pivot: 3, 1, 4, 1, 5, 2 → swap to left of pivot
+  After partition: [3, 1, 4, 1, 5, 2, 6, 9]
+  Pivot 6 is now in correct position (index 6)
+
+ALGORITHM COMPARISON TABLE:
+Algorithm     | Best     | Average  | Worst    | Space  | Stable
+Bubble Sort   | O(n)     | O(n²)    | O(n²)    | O(1)   | Yes
+Insertion Sort| O(n)     | O(n²)    | O(n²)    | O(1)   | Yes
+Selection Sort| O(n²)    | O(n²)    | O(n²)    | O(1)   | No
+Merge Sort    | O(nlogn) | O(nlogn) | O(nlogn) | O(n)   | Yes
+Quick Sort    | O(nlogn) | O(nlogn) | O(n²)    | O(logn)| No
+Heap Sort     | O(nlogn) | O(nlogn) | O(nlogn) | O(1)   | No
+
+INTERVIEW TIP:
+Know when to use each: Merge Sort for linked lists or stable sort needed, Quick Sort for arrays (fast in practice), Heap Sort when O(1) space required. For binary search, the template is: lo=0, hi=n-1, while lo<=hi: mid=(lo+hi)//2, if arr[mid]==target: return mid, elif arr[mid]<target: lo=mid+1, else: hi=mid-1.

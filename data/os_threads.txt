@@ -1,0 +1,68 @@
+TOPIC: THREADS
+Category: Operating Systems (OS)
+
+DEFINITION:
+A Thread is the smallest unit of execution within a process. A process can contain multiple threads that share the same memory space, file descriptors, and resources — but each thread has its own program counter, stack, and register set. Threads enable parallelism and concurrent execution within a single process, making them more lightweight than processes.
+
+KEY CONCEPTS:
+- Thread vs Process: Threads share the same address space (memory). Processes have separate memory spaces. Creating a thread is much faster than creating a process (lightweight). Context switching between threads is faster than between processes.
+- Thread Components (per thread): Program Counter, Stack (local variables, function call history), Register Set, Thread ID.
+- Shared Among Threads: Heap memory, code segment, data segment, open files, global variables.
+- Multithreading: Multiple threads executing concurrently within one process — enables parallelism (on multi-core CPUs) or concurrency (on single-core via rapid switching).
+- User-Level Threads: Managed by a user-level thread library (e.g., POSIX pthreads). OS is unaware — maps many user threads to one kernel thread (many-to-one model). Fast creation but cannot use multiple CPUs.
+- Kernel-Level Threads: Managed directly by the OS. Each thread is a separate schedulable entity. Supports true parallelism on multi-core systems. Slower creation than user threads.
+- Thread Models: Many-to-One, One-to-One (modern OSes like Linux, Windows), Many-to-Many.
+- Race Condition: When two threads access shared data concurrently and the outcome depends on the order of execution. Leads to unpredictable bugs.
+- Critical Section: A code segment that accesses shared resources and must not be executed by more than one thread at a time.
+- Synchronization Mechanisms:
+  - Mutex (Mutual Exclusion Lock): Only one thread can hold the lock at a time. Others wait.
+  - Semaphore: A counter-based synchronization primitive. Binary semaphore = mutex. Counting semaphore controls access to N resources.
+  - Monitor: High-level synchronization construct combining mutex and condition variables (Java's synchronized keyword).
+  - Deadlock: Two or more threads wait for each other's locks — circular wait, no progress.
+
+EXPLANATION:
+Threads are the foundation of concurrent programming. A web server, for example, creates a new thread for each incoming request — all threads share server memory (connection pool, caches) but execute independently. On a multi-core CPU, threads run truly in parallel. On single-core, the OS rapidly switches between threads, creating the illusion of parallelism. The biggest challenge with multithreading is synchronization: since threads share memory, simultaneous reads and writes to the same variable (without synchronization) cause race conditions. Mutexes (locks) solve this — only one thread executes the critical section at a time. Semaphores generalize this to manage access to N resources. The key tradeoff: more threads can improve throughput but increase synchronization overhead and the risk of deadlocks.
+
+EXAMPLE:
+Race Condition:
+  Global: counter = 0
+  Thread 1: counter = counter + 1  (reads 0, writes 1)
+  Thread 2: counter = counter + 1  (reads 0, writes 1) ← reads BEFORE Thread 1 finishes!
+  Result: counter = 1 (expected: 2) — Race Condition!
+
+Fix with Mutex:
+  mutex.lock()
+  counter = counter + 1  ← only one thread at a time
+  mutex.unlock()
+  Result: counter = 2 ✓
+
+Producer-Consumer with Semaphores:
+  empty_slots = Semaphore(BUFFER_SIZE)  ← starts at N
+  filled_slots = Semaphore(0)
+  mutex = Mutex()
+
+  Producer:
+    empty_slots.wait()   ← decrement (block if 0 empty slots)
+    mutex.lock()
+    buffer.add(item)
+    mutex.unlock()
+    filled_slots.signal()  ← increment filled count
+
+  Consumer:
+    filled_slots.wait()  ← wait until something available
+    mutex.lock()
+    item = buffer.remove()
+    mutex.unlock()
+    empty_slots.signal()  ← increment empty count
+
+Thread vs Process Comparison:
+  Feature          | Thread              | Process
+  Memory           | Shared with process | Separate (isolated)
+  Creation Time    | Fast (~microseconds)| Slow (~milliseconds)
+  Context Switch   | Fast                | Slow
+  Communication    | Easy (shared mem)   | Complex (IPC needed)
+  Crash Impact     | Can crash process   | Isolated from others
+  Use Case         | Concurrent tasks    | Independent programs
+
+INTERVIEW TIP:
+Always mention race conditions and synchronization when discussing threads. Key Java multithreading terms: synchronized keyword (monitor), volatile (visibility), java.util.concurrent package. In Python, the Global Interpreter Lock (GIL) prevents true parallelism for CPU-bound threads — use multiprocessing for CPU-bound tasks, threading for I/O-bound tasks.

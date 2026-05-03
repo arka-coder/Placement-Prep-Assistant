@@ -1,0 +1,62 @@
+TOPIC: DEADLOCKS
+Category: Operating Systems (OS)
+
+DEFINITION:
+A Deadlock is a situation in a multi-threaded or multi-process system where two or more processes are permanently blocked, each waiting for a resource held by another process in the waiting chain. No process can proceed — the system is stuck in circular waiting indefinitely. Deadlocks are a critical problem in operating systems, databases, and concurrent programming.
+
+KEY CONCEPTS:
+- The Four Necessary Conditions (Coffman Conditions — ALL four must hold simultaneously for deadlock):
+  1. Mutual Exclusion: At least one resource is non-shareable — only one process can use it at a time.
+  2. Hold and Wait: A process holds at least one resource and is waiting to acquire additional resources held by other processes.
+  3. No Preemption: Resources cannot be forcibly taken from a process — they must be voluntarily released.
+  4. Circular Wait: A set of processes {P1, P2, ..., Pn} where P1 waits for P2's resource, P2 waits for P3's resource, ..., Pn waits for P1's resource.
+
+- Resource Allocation Graph (RAG): A directed graph where processes and resources are nodes. An edge from Process to Resource means the process is requesting it. An edge from Resource to Process means the resource is assigned to it. A cycle in the RAG indicates a deadlock (for single-instance resources).
+
+- Deadlock Handling Strategies:
+  1. Prevention: Eliminate at least one of the four Coffman conditions by design.
+  2. Avoidance: Dynamically check if granting a resource request leads to a safe state (Banker's Algorithm).
+  3. Detection and Recovery: Allow deadlocks to occur, detect them via RAG cycle detection, and recover.
+  4. Ignorance: Pretend deadlocks don't happen (Ostrich Algorithm) — used in many general-purpose OS like Linux/Windows for rare deadlocks.
+
+- Banker's Algorithm: A deadlock avoidance algorithm by Dijkstra. Before granting a resource, the OS simulates the allocation and checks if the system remains in a "safe state" (there exists a safe sequence where all processes can finish). If safe, grant; if unsafe, make the process wait.
+
+- Starvation vs Deadlock: Starvation = a process waits indefinitely but is not permanently blocked (it could eventually get the resource). Deadlock = all processes are permanently blocked. Aging (gradually increasing priority of waiting processes) prevents starvation.
+
+EXPLANATION:
+Deadlocks occur when all four Coffman conditions are simultaneously true. Breaking even one condition prevents deadlock. Deadlock Prevention modifies system policies: eliminate Mutual Exclusion by making resources shareable (not always possible), eliminate Hold-and-Wait by requiring a process to request all resources at once before starting, allow Preemption by forcibly taking resources from low-priority processes, or eliminate Circular Wait by imposing a total ordering on resource types (processes must request resources in increasing order). Banker's Algorithm is the classic avoidance approach: maintain a "safe sequence" — an order in which all processes can run to completion. If granting a request would leave no safe sequence, deny the request. In practice, databases use timeout-based deadlock detection — if a transaction waits too long, abort and retry.
+
+EXAMPLE:
+Classic Deadlock Scenario (Dining Philosophers Problem):
+  5 philosophers sit at a table, 5 forks between them.
+  Each philosopher needs 2 forks (left and right) to eat.
+  All simultaneously pick up their left fork → no right fork available → deadlock!
+  Solution: Allow at most 4 philosophers to pick up a fork simultaneously (breaks circular wait)
+  OR: Use asymmetric solution — odd-numbered pick left first, even-numbered pick right first.
+
+Code Example (Thread Deadlock):
+  Thread 1: lock(A), then lock(B)
+  Thread 2: lock(B), then lock(A)
+
+  T1 acquires Lock A → T2 acquires Lock B
+  T1 tries to acquire Lock B (blocked, T2 holds it)
+  T2 tries to acquire Lock A (blocked, T1 holds it)
+  → DEADLOCK! Both threads wait forever.
+
+  Fix: Impose lock ordering — both threads must always acquire A before B:
+  Thread 1: lock(A), then lock(B)
+  Thread 2: lock(A), then lock(B)
+  → No circular wait → No deadlock
+
+Banker's Algorithm (Safe State Check):
+  Processes: P1, P2, P3. Single resource type with 12 instances.
+  Max Need: P1=10, P2=4, P3=9. Currently Allocated: P1=5, P2=2, P3=2.
+  Available = 12 - (5+2+2) = 3.
+  Need (remaining): P1=5, P2=2, P3=7.
+  Safe Sequence: P2 (needs 2, available 3) → finishes, releases 2 → available=5
+              → P1 (needs 5, available 5) → finishes, releases 5 → available=10
+              → P3 (needs 7, available 10) → finishes ✓
+  Safe sequence exists → SAFE STATE → no deadlock.
+
+INTERVIEW TIP:
+Memorize the four Coffman conditions — deadlock occurs ONLY when ALL four are present simultaneously. The most practical prevention strategy is to impose a total ordering on resource acquisition (e.g., always lock resource A before B, never B before A). For database deadlocks, mention that DBMSes use timeout and wait-for graph cycle detection, then abort the youngest/cheapest transaction to break the deadlock.

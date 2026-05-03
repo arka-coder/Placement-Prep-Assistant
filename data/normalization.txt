@@ -1,0 +1,60 @@
+TOPIC: NORMALIZATION
+Category: Database Management Systems (DBMS)
+
+DEFINITION:
+Normalization is the systematic process of organizing a relational database schema to reduce data redundancy (storing the same data in multiple places) and eliminate update anomalies (insertion, update, and deletion anomalies). It works by decomposing tables into smaller, well-structured tables linked by foreign keys, guided by a series of rules called Normal Forms.
+
+KEY CONCEPTS:
+- Data Redundancy: Storing the same piece of information in multiple rows. Leads to inconsistency when data is updated in one place but not others.
+- Insertion Anomaly: Cannot insert data without other unrelated data. Example: Can't add a new course until at least one student enrolls.
+- Update Anomaly: Updating data in one row requires updating many rows to maintain consistency.
+- Deletion Anomaly: Deleting a row accidentally removes other unrelated important data.
+- Functional Dependency (FD): Attribute B is functionally dependent on attribute A if each value of A determines exactly one value of B. Written as A → B.
+- Partial Dependency: A non-key attribute depends on only part of a composite primary key (violates 2NF).
+- Transitive Dependency: A non-key attribute depends on another non-key attribute (violates 3NF).
+- Candidate Key: A minimal set of attributes that uniquely identifies a row.
+- Normal Forms: 1NF → 2NF → 3NF → BCNF → 4NF → 5NF (each level resolves a specific type of dependency problem)
+- Denormalization: Intentionally introducing redundancy for query performance (used in data warehouses and OLAP systems).
+
+EXPLANATION:
+Normalization was formalized by Edgar Codd (inventor of the relational model) to ensure data integrity. Each normal form addresses a specific type of problematic dependency. Without normalization, databases suffer from anomalies: if a student's address is stored in every enrollment record, updating the address requires modifying dozens of rows — one missed update creates inconsistency. The normalization process progressively removes these problems: 1NF removes repeating groups, 2NF removes partial dependencies, 3NF removes transitive dependencies, BCNF is the strictest practical form. Most production databases target 3NF as a practical balance between data integrity and query performance.
+
+EXAMPLE:
+Unnormalized Table (violates 1NF and 2NF):
+  | StudentID | StudentName | Course1 | Course2 | TeacherName |
+  |-----------|-------------|---------|---------|-------------|
+  | 1         | Alice       | Math    | Physics | Dr. Smith   |
+  | 2         | Bob         | Math    | Chem    | Dr. Jones   |
+
+Step 1 — 1NF (Atomic values, no repeating groups):
+  | StudentID | StudentName | Course     |
+  |-----------|-------------|------------|
+  | 1         | Alice       | Math       |
+  | 1         | Alice       | Physics    |
+  | 2         | Bob         | Math       |
+  | 2         | Bob         | Chemistry  |
+  Primary Key: (StudentID, Course)
+
+Step 2 — 2NF (Remove partial dependencies):
+  StudentName depends only on StudentID (partial dependency on composite key)
+  → Split into:
+  Students Table: | StudentID | StudentName |
+  Enrollments Table: | StudentID | Course |
+
+Step 3 — 3NF (Remove transitive dependencies):
+  If Course → TeacherName (teacher depends on course, not student):
+  → Create Courses Table: | Course | TeacherName |
+  Enrollments Table: | StudentID | Course |
+
+BCNF Example:
+  Table: (Student, Course, Teacher) where each teacher teaches one course and each student can have multiple teachers.
+  FD: Teacher → Course (teacher determines course, but teacher is not a superkey)
+  This violates BCNF → Split: (Student, Teacher) and (Teacher, Course)
+
+INTERVIEW TIP:
+A useful way to remember the forms:
+- 1NF: No repeating groups, atomic values.
+- 2NF: No partial dependencies (every non-key attribute depends on the WHOLE primary key).
+- 3NF: No transitive dependencies (non-key attribute should not depend on another non-key attribute).
+- BCNF: For every X → Y, X must be a superkey.
+Normalization is about eliminating redundancy; denormalization is about adding it back for performance.

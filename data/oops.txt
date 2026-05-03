@@ -1,0 +1,122 @@
+TOPIC: OOPS - OBJECT-ORIENTED PROGRAMMING CONCEPTS
+Category: Object-Oriented Programming (OOP)
+
+DEFINITION:
+Object-Oriented Programming (OOP) is a programming paradigm that organizes software design around data (objects) rather than functions and logic. An object is an instance of a class that encapsulates data (attributes) and behavior (methods) together. The four core pillars of OOP are Encapsulation, Inheritance, Polymorphism, and Abstraction. OOP promotes code reusability, modularity, and maintainability.
+
+KEY CONCEPTS:
+
+--- 1. ENCAPSULATION ---
+Definition: Encapsulation is the bundling of data (attributes) and the methods that operate on that data into a single unit (class), and restricting direct access to the internal state using access modifiers (private, protected, public). It hides implementation details and exposes only what is necessary.
+- Access Modifiers: Public (accessible everywhere), Protected (accessible in same package and subclasses), Private (accessible only within the same class).
+- Getters and Setters: Public methods to safely read and write private fields — allow validation logic before setting values.
+- Benefit: Data hiding prevents unintended modification of internal state. Changing internal implementation doesn't break external code.
+Example:
+  class BankAccount:
+    def __init__(self):
+      self.__balance = 0  # private attribute
+
+    def deposit(self, amount):
+      if amount > 0:
+        self.__balance += amount  # controlled modification
+
+    def get_balance(self):
+      return self.__balance  # controlled read
+
+  account = BankAccount()
+  account.deposit(500)
+  # account.__balance = -1000  # ERROR: cannot access private attribute directly
+
+--- 2. INHERITANCE ---
+Definition: Inheritance is a mechanism where a child class (subclass/derived class) acquires the properties and behaviors (attributes and methods) of a parent class (superclass/base class). It enables code reuse and establishes an "IS-A" relationship between classes.
+- Types: Single Inheritance (one parent), Multiple Inheritance (multiple parents, supported in Python but not Java), Multilevel Inheritance (A → B → C chain), Hierarchical Inheritance (one parent, multiple children).
+- Method Overriding: Child class provides its own implementation of a method defined in the parent class (same name, same signature).
+- super() keyword: Used to call the parent class's constructor or method from the child class.
+- Diamond Problem: In multiple inheritance, if both parents have the same method, it's ambiguous which one is inherited. Java avoids this by not supporting multiple class inheritance (only through interfaces).
+Example:
+  class Animal:
+    def __init__(self, name):
+      self.name = name
+    def speak(self):
+      return "Some sound"
+
+  class Dog(Animal):  # Dog IS-A Animal
+    def speak(self):   # Method Overriding
+      return "Woof!"
+
+  class Cat(Animal):
+    def speak(self):
+      return "Meow!"
+
+  dog = Dog("Buddy")
+  print(dog.name)   # "Buddy" (inherited from Animal)
+  print(dog.speak()) # "Woof!" (overridden)
+
+--- 3. POLYMORPHISM ---
+Definition: Polymorphism (Greek for "many forms") is the ability of an object to take multiple forms or for a single interface to represent different underlying data types. It allows the same method name to perform different behaviors depending on the object type.
+- Compile-Time Polymorphism (Static): Method Overloading — same method name but different parameters (number or type). Resolved at compile time. (Java supports this; Python uses default arguments instead.)
+- Runtime Polymorphism (Dynamic): Method Overriding — parent class reference can hold a child class object; the correct overridden method is called at runtime based on the actual object type. Achieved through virtual functions.
+- Duck Typing (Python): "If it walks like a duck and quacks like a duck, it is a duck." Python determines method calls at runtime based on the object's actual type, not its declared type.
+Example (Runtime Polymorphism):
+  animals = [Dog("Rex"), Cat("Whiskers"), Animal("Unknown")]
+  for animal in animals:
+    print(animal.speak())  # Calls the correct speak() for each type
+  # Output: "Woof!", "Meow!", "Some sound"
+  # Same interface (speak), different behavior per object type
+
+Method Overloading (Java — Compile-Time):
+  class Calculator {
+    int add(int a, int b) { return a + b; }         // 2 params
+    double add(double a, double b) { return a + b; } // different types
+    int add(int a, int b, int c) { return a+b+c; }  // 3 params
+  }
+
+--- 4. ABSTRACTION ---
+Definition: Abstraction is the principle of hiding complex implementation details and exposing only the essential features and functionality to the user. It defines WHAT an object does without revealing HOW it does it. Abstraction is achieved through Abstract Classes and Interfaces.
+- Abstract Class: A class that cannot be instantiated directly and may contain abstract methods (methods declared without a body). Subclasses must implement all abstract methods. Can have both abstract and concrete methods.
+- Interface: A contract that specifies a set of methods a class must implement. Contains only method signatures (abstract methods) and constants. A class can implement multiple interfaces (unlike single class inheritance). Achieves multiple inheritance in Java.
+- Abstract vs Interface:
+  - Abstract Class: "IS-A" relationship, has partial implementation, single inheritance.
+  - Interface: "CAN-DO" relationship, only method signatures, multiple implementation allowed.
+Example:
+  from abc import ABC, abstractmethod
+
+  class Shape(ABC):  # Abstract Class
+    @abstractmethod
+    def area(self):   # Abstract method — no implementation
+      pass
+
+    def describe(self):  # Concrete method — has implementation
+      print(f"I am a shape with area {self.area()}")
+
+  class Circle(Shape):
+    def __init__(self, radius):
+      self.radius = radius
+    def area(self):
+      return 3.14 * self.radius ** 2
+
+  class Rectangle(Shape):
+    def __init__(self, w, h):
+      self.w, self.h = w, h
+    def area(self):
+      return self.w * self.h
+
+  # shape = Shape()  # ERROR: Cannot instantiate abstract class
+  c = Circle(5)
+  c.describe()  # "I am a shape with area 78.5"
+
+--- OOP RELATIONSHIPS ---
+- IS-A (Inheritance): Dog IS-A Animal. Use when one class is a specialized version of another.
+- HAS-A (Composition): Car HAS-A Engine. A class contains an instance of another class. Preferred over inheritance for code flexibility ("Favor composition over inheritance").
+- USES-A (Dependency): A method uses an object of another class as a parameter.
+
+--- OOP vs PROCEDURE-ORIENTED PROGRAMMING ---
+  Feature          | OOP                        | Procedural
+  Data             | Encapsulated in objects     | Separate from functions
+  Code Reuse       | Via Inheritance             | Via functions
+  Security         | Data hiding (private)       | No data hiding
+  Approach         | Bottom-up (objects first)   | Top-down (functions first)
+  Examples         | Java, Python, C++, C#       | C, Pascal, FORTRAN
+
+INTERVIEW TIP:
+Always use a real-world analogy: Encapsulation = medicine capsule (internal details hidden); Inheritance = child inherits traits from parent; Polymorphism = a person can be a student, an employee, and a son simultaneously; Abstraction = driving a car without knowing engine internals. The four pillars work together — Abstraction defines what, Encapsulation hides how, Inheritance shares behavior, Polymorphism adapts behavior.

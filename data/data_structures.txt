@@ -1,0 +1,61 @@
+Data Structures and Algorithms (DSA) Study Notes
+
+1. STACK (LIFO — Last In First Out)
+Definition: A Stack is a linear data structure that follows the Last In First Out (LIFO) principle, meaning the element inserted last is the first to be removed. Think of it as a stack of plates — you can only add or remove from the top.
+Explanation: A stack supports three primary operations — Push (insert an element onto the top), Pop (remove the top element), and Peek or Top (view the top element without removing it). Stacks are implemented using arrays or linked lists. All three operations run in O(1) time and the structure requires O(n) space.
+Example: Browser back-button history, function call stack in recursion, undo/redo functionality in text editors, balanced parenthesis checking, and expression evaluation (infix to postfix conversion).
+Interview Tip: When asked about recursion internals, mention that every recursive call is managed via the system call stack — each function call pushes a frame, and returns pop it.
+
+2. QUEUE (FIFO — First In First Out)
+Definition: A Queue is a linear data structure that follows the First In First Out (FIFO) principle — the element inserted first is the first to be removed. It is analogous to a real-world queue at a ticket counter.
+Explanation: A queue supports Enqueue (add element at rear), Dequeue (remove element from front), and Peek (view front element). All operations are O(1). Types include: Simple Queue, Circular Queue (fixes wasted space in array-based queues), Priority Queue (ordered by priority, not insertion order), and Deque (Double-Ended Queue, supports insert/delete at both ends).
+Example: CPU scheduling, printer spooler, BFS (Breadth-First Search) traversal, real-time data buffering (keyboard buffer, network packets).
+Interview Tip: Circular Queue solves the limitation of a simple array-based queue by treating the array as circular, reusing freed-up front positions. Always clarify which type of queue is needed.
+
+3. LINKED LIST
+Definition: A Linked List is a linear data structure where each element (called a node) stores data and a pointer/reference to the next node in the sequence. Unlike arrays, linked list nodes are not stored in contiguous memory.
+Explanation: Types include Singly Linked List (each node points to next), Doubly Linked List (each node has both next and previous pointers — allows backward traversal), and Circular Linked List (last node points back to head). Insertion and deletion at head/tail are O(1), but search is O(n) since there is no random access.
+Example: Implementing stacks and queues, representing polynomial expressions, adjacency list in graphs, LRU (Least Recently Used) cache using a doubly linked list + hash map.
+Interview Tip: Many linked list interview problems (reversal, cycle detection, merge two sorted lists) require two-pointer (slow/fast pointer) or in-place reversal techniques.
+
+4. BINARY TREE
+Definition: A Binary Tree is a hierarchical data structure where each node has at most two children — a left child and a right child. The topmost node is called the root; nodes with no children are called leaf nodes.
+Explanation: Key properties include height (max depth from root to leaf), depth (distance of a node from root), and the number of nodes at level L being at most 2^L. Traversal types: In-order (Left → Root → Right, gives sorted output for BST), Pre-order (Root → Left → Right, used for tree copying), Post-order (Left → Right → Root, used for tree deletion), and Level-order (BFS, level by level). Traversals run in O(n).
+Example: File system directory structures, expression trees for mathematical expressions, decision trees in machine learning.
+Interview Tip: Always clarify if the binary tree is also a BST before answering search/insert/delete complexity questions — regular binary trees do not guarantee ordering.
+
+5. BINARY SEARCH TREE (BST)
+Definition: A Binary Search Tree (BST) is a binary tree with the ordering property: for every node, all values in the left subtree are less than the node, and all values in the right subtree are greater than the node.
+Explanation: This ordering enables efficient searching — search, insert, and delete all take O(log n) on average (for balanced BSTs) and O(n) worst case (when the tree is skewed, e.g., inserting sorted data). A BST becomes a sorted structure — in-order traversal always yields elements in ascending order.
+Example: Database indexing, autocomplete/search-as-you-type systems, implementing dictionaries and sets.
+Interview Tip: A degenerate (skewed) BST behaves like a linked list with O(n) operations. This is why self-balancing BSTs like AVL Trees and Red-Black Trees exist.
+
+6. AVL TREE (Self-Balancing BST)
+Definition: An AVL Tree (named after Adelson-Velsky and Landis) is a self-balancing Binary Search Tree where the balance factor of every node — defined as height(left subtree) − height(right subtree) — is always −1, 0, or +1.
+Explanation: Whenever an insertion or deletion violates this balance condition, the tree performs rotations to restore balance. There are four rotation types: Left Rotation, Right Rotation, Left-Right Rotation, and Right-Left Rotation. Because the tree is always balanced, all operations (search, insert, delete) are guaranteed O(log n), unlike a regular BST.
+Example: Used in database engines and language library implementations where guaranteed O(log n) operations are critical.
+Interview Tip: Know the four rotation types — single (LL, RR) and double (LR, RL). The balance factor is the key — memorize: BF = height(left) − height(right), and any value outside {-1, 0, 1} triggers rebalancing.
+
+7. HEAP (Min-Heap and Max-Heap)
+Definition: A Heap is a complete binary tree (all levels fully filled except possibly the last, which is filled left to right) that satisfies the heap property. In a Max-Heap, every parent is greater than or equal to its children. In a Min-Heap, every parent is less than or equal to its children.
+Explanation: Heaps are most efficiently stored as arrays (for node at index i: left child = 2i+1, right child = 2i+2, parent = (i-1)/2). Key operations: Insert takes O(log n) — add to end and "heapify up". Delete (always delete root, the max/min) takes O(log n) — replace root with last element and "heapify down". Peek (view max/min) is O(1).
+Example: Priority queues, Heap Sort (O(n log n)), finding the K largest/smallest elements in O(n log K) time, Dijkstra's shortest path algorithm uses a min-heap.
+Interview Tip: Heap Sort is in-place (O(1) extra space) and not stable, which is its tradeoff vs Merge Sort. Building a heap from an array is O(n), not O(n log n).
+
+8. HASHING AND HASH TABLE
+Definition: A Hash Table (also called Hash Map) is a data structure that maps keys to values using a hash function. The hash function converts a key into an array index, enabling average O(1) time complexity for insert, delete, and lookup operations.
+Explanation: Collision occurs when two different keys hash to the same index. Collision resolution strategies include Chaining (each bucket holds a linked list of entries) and Open Addressing (find next available slot using Linear Probing, Quadratic Probing, or Double Hashing). Load Factor = (number of entries) / (array size); when it exceeds a threshold (typically 0.7), the table is resized (rehashed). A good hash function distributes keys uniformly.
+Example: Python dictionaries, Java HashMaps, database caching, counting word frequencies, LRU cache implementation, set membership testing.
+Interview Tip: Always mention collision handling when discussing hash tables. In worst case (all keys collide), time complexity degrades to O(n). A well-designed hash function keeps average case O(1).
+
+9. GRAPH
+Definition: A Graph is a non-linear data structure consisting of a set of vertices (nodes) and edges (connections between nodes). Formally, G = (V, E) where V is a set of vertices and E is a set of edges.
+Explanation: Graphs can be Directed (edges have direction) or Undirected, Weighted (edges have costs) or Unweighted, and Cyclic or Acyclic (a DAG — Directed Acyclic Graph — has no cycles). Representation: Adjacency Matrix uses O(V²) space, fast edge lookup O(1); Adjacency List uses O(V + E) space, efficient for sparse graphs. BFS (Breadth-First Search) uses a queue and finds shortest paths in unweighted graphs; DFS (Depth-First Search) uses a stack/recursion and is used for cycle detection, topological sort, and connected components.
+Example: Social networks (friend connections), Google Maps (navigation — weighted directed graph), web crawlers, dependency resolution (topological sort), recommendation systems.
+Interview Tip: For shortest path problems: BFS for unweighted graphs, Dijkstra's for weighted graphs (non-negative weights), Bellman-Ford for graphs with negative weights. Know when to use each.
+
+10. DYNAMIC PROGRAMMING (DP)
+Definition: Dynamic Programming (DP) is an algorithmic technique that solves complex problems by breaking them down into overlapping subproblems, solving each subproblem only once, and storing the results (memoization or tabulation) to avoid redundant computation.
+Explanation: DP is applicable when a problem has Optimal Substructure (optimal solution is built from optimal solutions of subproblems) and Overlapping Subproblems (same subproblems are solved multiple times). Two approaches: Top-Down (Memoization) — recursive with a cache; Bottom-Up (Tabulation) — iterative, fills a table from base cases up. Time complexity is typically O(n) or O(n²) vs exponential for naive recursion.
+Example: Fibonacci sequence (O(n) with DP vs O(2^n) naive), 0/1 Knapsack problem, Longest Common Subsequence (LCS), Longest Increasing Subsequence (LIS), Matrix Chain Multiplication, Coin Change problem.
+Interview Tip: Start by identifying the recursive structure and base case. Draw the recursion tree to spot overlapping subproblems. Then decide: memoize top-down or tabulate bottom-up. Always state the time and space complexity of your DP solution.

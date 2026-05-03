@@ -1,0 +1,59 @@
+TOPIC: DYNAMIC PROGRAMMING
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+Dynamic Programming (DP) is an optimization technique that solves complex problems by breaking them into overlapping subproblems, solving each subproblem exactly once, and storing the results to avoid redundant computation. DP converts exponential time brute-force solutions into polynomial time solutions. It applies when the problem has two properties: optimal substructure and overlapping subproblems.
+
+KEY CONCEPTS:
+- Optimal Substructure: The optimal solution to the problem contains optimal solutions to its subproblems. (e.g., shortest path: optimal path through A includes optimal path to A)
+- Overlapping Subproblems: The same subproblems are solved multiple times in a naive recursive approach. DP stores these to avoid recomputation.
+- Memoization (Top-Down DP): Write the recursive solution, but cache results in a dictionary/array. When a subproblem is first solved, store the result. On subsequent calls, return the cached result directly.
+- Tabulation (Bottom-Up DP): Build a DP table iteratively starting from base cases and filling it up until the final answer. No recursion stack overhead.
+- State: A unique identifier for each subproblem (e.g., dp[i] = max profit using first i items).
+- Transition (Recurrence Relation): The equation linking current state to previous states (e.g., dp[i] = max(dp[i-1] + arr[i], arr[i])).
+- Base Case: The initial values in the DP table (e.g., dp[0] = arr[0]).
+- Space Optimization: Many DP problems only need the previous row/element, reducing space from O(n²) to O(n) or O(1).
+
+EXPLANATION:
+The core idea of DP is simple: "Don't solve the same subproblem twice." The classic example is Fibonacci — naive recursion computes fib(3) dozens of times for large n (O(2^n)), but DP stores each result (O(n)). Identifying DP problems: if the brute force is exhaustive search (recursion with choices) and the same recursive calls repeat, DP applies. The two main DP paradigms are: (1) Top-Down (Memoization) — intuitive, write recursion + add a cache; (2) Bottom-Up (Tabulation) — fills a table iteratively, no stack overflow risk, often faster in practice. Common DP patterns: 0/1 Knapsack, Unbounded Knapsack, Subsequences (LCS, LIS), Grid DP, Interval DP, Tree DP, String DP.
+
+EXAMPLE:
+Kadane's Algorithm (Maximum Subarray Sum — 1D DP):
+  Array: [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+  dp[i] = max subarray ending at index i
+  Recurrence: dp[i] = max(arr[i], dp[i-1] + arr[i])
+  Base: dp[0] = arr[0] = -2
+  dp[1] = max(1, -2+1) = 1
+  dp[2] = max(-3, 1-3) = -2
+  dp[3] = max(4, -2+4) = 4
+  dp[4] = max(-1, 4-1) = 3
+  dp[5] = max(2, 3+2) = 5
+  dp[6] = max(1, 5+1) = 6  ← Maximum
+  Answer: 6 (subarray [4, -1, 2, 1])
+
+0/1 Knapsack Problem:
+  Items: weights=[1,3,4,5], values=[1,4,5,7], capacity=7
+  dp[i][w] = max value using first i items with capacity w
+  For each item: either skip it (dp[i-1][w]) or take it (dp[i-1][w-weight[i]] + value[i])
+  Answer: dp[4][7] = 9
+
+Longest Common Subsequence (LCS):
+  s1 = "ABCBDAB", s2 = "BDCABA"
+  dp[i][j] = LCS of s1[0..i-1] and s2[0..j-1]
+  If s1[i-1] == s2[j-1]: dp[i][j] = dp[i-1][j-1] + 1
+  Else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+  Answer: LCS length = 4 ("BCBA" or "BDAB")
+
+Classic DP Problems:
+- Fibonacci (O(n) DP vs O(2^n) naive)
+- 0/1 Knapsack
+- Longest Common Subsequence (LCS)
+- Longest Increasing Subsequence (LIS)
+- Coin Change (minimum coins)
+- Edit Distance (minimum operations)
+- Matrix Chain Multiplication
+- Egg Drop Problem
+- Palindrome Partitioning
+
+INTERVIEW TIP:
+Follow this 4-step approach: (1) Identify that it's a DP problem — choices at each step, optimization objective, overlapping subproblems. (2) Define the state clearly. (3) Write the recurrence relation. (4) Add base cases and handle the order of computation. Always state the time (O(n) or O(n²)) and space complexity of your DP solution.

@@ -1,0 +1,61 @@
+TOPIC: TREES
+Category: Data Structures and Algorithms (DSA)
+
+DEFINITION:
+A Tree is a non-linear, hierarchical data structure consisting of nodes connected by edges, with no cycles. Every tree has a root node (the topmost node), and every node can have zero or more child nodes. A Binary Tree is a special tree where each node has at most two children, called the left child and the right child.
+
+KEY CONCEPTS:
+- Root: The topmost node with no parent.
+- Leaf Node: A node with no children (also called an external node).
+- Height of Tree: Maximum number of edges from root to any leaf.
+- Depth of Node: Number of edges from the root to that node.
+- Binary Tree: Each node has at most 2 children.
+- Full Binary Tree: Every node has exactly 0 or 2 children.
+- Complete Binary Tree: All levels fully filled except possibly the last (filled left to right). Used in heaps.
+- Perfect Binary Tree: All internal nodes have exactly 2 children and all leaves are at the same level.
+- Binary Search Tree (BST): Left subtree values < node value < right subtree values. Enables O(log n) search.
+- Balanced BST: Height is O(log n) — e.g., AVL Tree, Red-Black Tree.
+- Tree Traversals:
+  - In-order (Left → Root → Right): Produces sorted output for BST
+  - Pre-order (Root → Left → Right): Used for tree serialization and copying
+  - Post-order (Left → Right → Root): Used for tree deletion and evaluating expression trees
+  - Level-order (BFS, level by level): Uses a queue; finds shortest path in unweighted trees
+
+EXPLANATION:
+Trees model hierarchical relationships — file systems, organizational charts, HTML DOM, and decision trees in ML. The binary tree is the most common form in interviews. The Binary Search Tree adds an ordering property that makes search, insert, and delete O(log n) on average — but O(n) worst case for a skewed (unbalanced) tree. Self-balancing BSTs (AVL, Red-Black) maintain O(log n) always by performing rotations. Heaps are complete binary trees that maintain a parent-child ordering property (max-heap or min-heap) and are stored efficiently in arrays. Tree traversals are critical: in-order on a BST gives sorted output, and post-order processes children before parent — essential for deletion and expression evaluation.
+
+EXAMPLE:
+Binary Tree:
+        10
+       /  \
+      5    15
+     / \     \
+    3   7     20
+
+In-order Traversal: 3 → 5 → 7 → 10 → 15 → 20 (sorted for BST ✓)
+Pre-order Traversal: 10 → 5 → 3 → 7 → 15 → 20
+Post-order Traversal: 3 → 7 → 5 → 20 → 15 → 10
+Level-order Traversal: 10 → 5 → 15 → 3 → 7 → 20
+
+BST Search for 7:
+  Start at root (10): 7 < 10, go left
+  At node (5): 7 > 5, go right
+  At node (7): 7 == 7, FOUND ✓
+  Time: O(log n) for balanced BST
+
+Lowest Common Ancestor (LCA) of 3 and 7:
+  At root (10): 3 < 10 and 7 < 10, both in left subtree → go left
+  At node (5): 3 < 5 and 7 > 5, they split here → LCA = 5
+
+Common Interview Problems:
+- Height/depth of a binary tree
+- Lowest Common Ancestor (LCA)
+- Check if a binary tree is a valid BST
+- Serialize and deserialize a binary tree
+- Diameter of a binary tree (longest path between any two nodes)
+- Invert/mirror a binary tree
+- Level-order traversal (print level by level)
+- Kth smallest element in a BST
+
+INTERVIEW TIP:
+Most tree problems are solved with recursion — think about what the function should return for the base case (NULL node) and a single node, then build up. For path problems (diameter, max path sum), use a helper function that returns a value and updates a global/nonlocal result variable during recursion.
