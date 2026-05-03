@@ -3,11 +3,7 @@ Placement Prep Assistant — Streamlit UI (Polished)
 """
 
 import streamlit as st
-import os
-from dotenv import load_dotenv
 from rag_pipeline import RAGPipeline
-
-load_dotenv()
 
 st.set_page_config(
     page_title="Placement Prep Assistant",
@@ -214,14 +210,28 @@ QUICK_PROMPTS = [
 ]
 
 
+# ── Secrets guard ─────────────────────────────────────────────────────────────
+# All secrets come from st.secrets — set them in:
+#   • Locally:          .streamlit/secrets.toml
+#   • Streamlit Cloud:  App Settings → Secrets
+for _required_key in ("GROQ_API_KEY",):
+    if _required_key not in st.secrets:
+        st.error(
+            f"❌ `{_required_key}` is missing from Streamlit secrets.\n\n"
+            "**Locally:** add it to `.streamlit/secrets.toml`:\n"
+            "```toml\nGROQ_API_KEY = \"your_key_here\"\n"
+            "TAVILY_API_KEY = \"your_key_here\"\n```\n\n"
+            "**Streamlit Cloud:** go to App Settings → Secrets and add the keys above."
+        )
+        st.stop()
+
+
 # ── Pipeline ───────────────────────────────────────────────────────────────────
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
-    key = os.getenv("GROQ_API_KEY")
-    if not key:
-        st.error("❌ GROQ_API_KEY missing from .env"); st.stop()
+    groq_key = st.secrets["GROQ_API_KEY"]
     try:
-        rag = RAGPipeline(groq_api_key=key)
+        rag = RAGPipeline(groq_api_key=groq_key)
         rag.initialize(rebuild_vector_store=False)
         return rag
     except Exception as e:

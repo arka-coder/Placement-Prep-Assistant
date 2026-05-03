@@ -30,6 +30,15 @@ TRUSTED_DOMAINS = [
 ]
 
 
+def _get_tavily_key() -> str:
+    """Read TAVILY_API_KEY from st.secrets (Streamlit Cloud) or os.getenv (local)."""
+    try:
+        import streamlit as st
+        return st.secrets.get("TAVILY_API_KEY", "") or os.getenv("TAVILY_API_KEY", "")
+    except Exception:
+        return os.getenv("TAVILY_API_KEY", "")
+
+
 def get_useful_links(query: str) -> List[Dict[str, str]]:
     """
     Search Tavily for beginner-friendly tutorials related to *query*
@@ -49,7 +58,7 @@ def get_useful_links(query: str) -> List[Dict[str, str]]:
             {"title": "Stack - W3Schools", "url": "https://..."},
         ]
     """
-    tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
+    tavily_key = _get_tavily_key().strip()
     if not tavily_key:
         logger.warning("TAVILY_API_KEY not set — skipping link recommendations")
         return []
