@@ -16,6 +16,10 @@ Key behaviours:
 
 ---
 
+## Live App : https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/
+
+---
+
 ## 🏗️ Project Structure
 
 ```
