@@ -29,7 +29,7 @@ Most interview prep tools either give shallow answers or flood you with irreleva
 
 ---
 
-## 🔗 Live Demo
+## Live Demo
 
 > **[Try the live app →](https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/)**
 
@@ -196,7 +196,7 @@ Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 
 ---
 
-## ☁️ Streamlit Cloud Deployment
+## Streamlit Cloud Deployment
 
 ### Step 1 — Push to GitHub
 
@@ -306,7 +306,7 @@ User Question
 
 ---
 
-## 🔧 Rebuilding the Vector Store
+## Rebuilding the Vector Store
 
 If you add or edit files in `data/`, rebuild the FAISS index:
 
