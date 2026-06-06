@@ -1,4 +1,4 @@
-# 🎯 Placement Prep Assistant
+# Placement Prep Assistant
 
 <p align="center">
   <img src="https://img.shields.io/badge/Built%20with-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" />
@@ -31,39 +31,11 @@ Most interview prep tools either give shallow answers or flood you with irreleva
 
 ## 🔗 Live Demo
 
-> **[🚀 Try the live app →](https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/)**
+> **[Try the live app →](https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/)**
 
 ---
 
-## 📸 Screenshots
 
-### 🏠 Homepage — Landing View
-![Homepage](screenshots/screenshot_homepage.png)
-*The landing page with stats (24 topics, 150+ resources, 100+ videos), suggested questions, and the structured sidebar with Learning Paths and Knowledge Base.*
-
----
-
-### 💬 AI Answer — Structured Interview Response
-![AI Answer](screenshots/screenshot_answer.png)
-*A structured answer to "Difference between Mutex and Semaphore" — includes definition, explanation, examples, and an interview tip.*
-
----
-
-### ⚙️ Generating Answer — Live Status Steps
-![Generating Answer](screenshots/screenshot_generating.png)
-*The assistant processes questions in real time, showing step-by-step status: Analyzing → Searching Knowledge Base → Finding Resources → Generating Answer.*
-
----
-
-### 📚 Curated Resources — Reading & Videos
-![Resources](screenshots/screenshot_resources.png)
-*Every answer includes recommended reading articles (with difficulty badges) and YouTube video cards from top educators.*
-
----
-
-### 🏷️ Answer Metadata — Difficulty & Company Tags
-![Metadata](screenshots/screenshot_metadata.png)
-*Answers are enriched with difficulty level, companies that frequently ask the question (e.g. Microsoft, Apple, VMware), and pro recruiter tips.*
 
 ---
 
