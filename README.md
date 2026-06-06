@@ -12,7 +12,7 @@
 
 ---
 
-## 📖 Project Description
+## Project Description
 
 The **Placement Prep Assistant** is a Retrieval-Augmented Generation (RAG) chatbot that helps you prepare for technical interviews. Ask any question on **DSA, DBMS, OS, OOP, or Machine Learning** and get a structured, interview-ready answer — complete with definitions, explanations, real-world examples, interview tips, curated reading links, and YouTube video recommendations.
 
@@ -20,11 +20,11 @@ The **Placement Prep Assistant** is a Retrieval-Augmented Generation (RAG) chatb
 Most interview prep tools either give shallow answers or flood you with irrelevant search results. This assistant combines a handcrafted knowledge base with a fast LLM (Groq's LLaMA 3.3-70B) and real-time web search to deliver answers that feel like advice from a senior engineer — not a Wikipedia scraper.
 
 **Key behaviours:**
-- 🔍 Answers are grounded in a curated **24-topic knowledge base** stored as FAISS vectors
-- 🤖 A **hybrid routing engine** automatically decides whether to use the knowledge base, blend it with general LLM knowledge, or fall back to pure LLM when the query is outside the corpus
-- 🌐 Real-time **learning links** are fetched via Tavily web search and appended to every answer
-- 🎥 **YouTube video recommendations** are surfaced for visual learners
-- 🗺️ **Structured learning paths** with topic-by-topic navigation in the sidebar
+- Answers are grounded in a curated **24-topic knowledge base** stored as FAISS vectors
+- A **hybrid routing engine** automatically decides whether to use the knowledge base, blend it with general LLM knowledge, or fall back to pure LLM when the query is outside the corpus
+-  Real-time **learning links** are fetched via Tavily web search and appended to every answer
+- **YouTube video recommendations** are surfaced for visual learners
+- **Structured learning paths** with topic-by-topic navigation in the sidebar
 - The UI never exposes internal retrieval mechanics — the assistant speaks like a confident tutor, not a search engine
 
 ---
@@ -39,7 +39,7 @@ Most interview prep tools either give shallow answers or flood you with irreleva
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 Placement Prep Assistant/
@@ -86,7 +86,7 @@ Placement Prep Assistant/
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -99,7 +99,7 @@ Placement Prep Assistant/
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, make sure you have:
 
@@ -114,7 +114,7 @@ Before you begin, make sure you have:
 
 ---
 
-## ⚙️ Local Setup Guide
+## Local Setup Guide
 
 ### Step 1 — Clone the Repository
 
@@ -231,7 +231,7 @@ Click **Deploy** and wait for the build to complete. The FAISS index will be bui
 
 ---
 
-## 🧠 How the RAG Pipeline Works
+## How the RAG Pipeline Works
 
 ```
 User Question
@@ -275,7 +275,7 @@ User Question
 
 ---
 
-## 📚 Knowledge Base — 24 Topics
+## Knowledge Base — 24 Topics
 
 ### Data Structures & Algorithms
 `data_structures` · `arrays` · `linked_list` · `stack_queue` · `trees` · `graphs` · `dynamic_programming` · `recursion` · `sorting_searching`
@@ -294,7 +294,7 @@ User Question
 
 ---
 
-## 🎨 UI Features
+## UI Features
 
 - **Dark glassmorphism theme** with Indigo/Violet gradient accents
 - **Quick-pick buttons** — 8 one-click topic launchers
@@ -331,7 +331,7 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ---
 
-## ⚡ Performance
+## Performance
 
 | Operation | Time |
 |---|---|
@@ -341,7 +341,7 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ---
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 | Problem | Fix |
 |---|---|
@@ -357,7 +357,7 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ---
 
-## 🔄 Extending the Assistant
+## Extending the Assistant
 
 1. **Add a new topic** — drop a `.txt` file into `data/` and rebuild the index
 2. **Change the LLM** — swap the `model=` parameter in `RAGPipeline.__init__` (any Groq-supported model works)
@@ -366,7 +366,7 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ---
 
-## 🔑 API Key Reference
+## API Key Reference
 
 | Key | Where to Get | Required? |
 |---|---|---|
@@ -376,7 +376,7 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
@@ -384,4 +384,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ---
 
-**Happy Learning! 🚀**
+**Happy Learning! **
