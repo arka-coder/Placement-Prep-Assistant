@@ -1,22 +1,69 @@
 # 🎯 Placement Prep Assistant
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Built%20with-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" />
+  <img src="https://img.shields.io/badge/LLM-Groq%20LLaMA%203.3-00A67E?style=for-the-badge&logo=llama&logoColor=white" />
+  <img src="https://img.shields.io/badge/Embeddings-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" />
+  <img src="https://img.shields.io/badge/Vector%20DB-FAISS-0082C9?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Web%20Search-Tavily-5B5EA6?style=for-the-badge" />
+</p>
+
 > **An AI-powered study companion for technical placement interviews — built with RAG, Groq LLM, local HuggingFace embeddings, and a premium Streamlit UI.**
 
 ---
 
-## 🚀 What It Does
+## 📖 Project Description
 
-The **Placement Prep Assistant** is a Retrieval-Augmented Generation (RAG) chatbot that helps you prepare for technical interviews. Ask any question on **DSA, DBMS, OS, OOP, or Machine Learning** and get a structured, interview-ready answer.
+The **Placement Prep Assistant** is a Retrieval-Augmented Generation (RAG) chatbot that helps you prepare for technical interviews. Ask any question on **DSA, DBMS, OS, OOP, or Machine Learning** and get a structured, interview-ready answer — complete with definitions, explanations, real-world examples, interview tips, curated reading links, and YouTube video recommendations.
 
-Key behaviours:
-- Answers are grounded in a curated 24-topic knowledge base stored as FAISS vectors
-- A **hybrid routing engine** automatically decides whether to use the knowledge base, blend it with general LLM knowledge, or fall back to pure LLM when the query is outside the corpus
-- Real-time **learning links** are fetched via Tavily web search and appended to every answer
+**Why this project?**  
+Most interview prep tools either give shallow answers or flood you with irrelevant search results. This assistant combines a handcrafted knowledge base with a fast LLM (Groq's LLaMA 3.3-70B) and real-time web search to deliver answers that feel like advice from a senior engineer — not a Wikipedia scraper.
+
+**Key behaviours:**
+- 🔍 Answers are grounded in a curated **24-topic knowledge base** stored as FAISS vectors
+- 🤖 A **hybrid routing engine** automatically decides whether to use the knowledge base, blend it with general LLM knowledge, or fall back to pure LLM when the query is outside the corpus
+- 🌐 Real-time **learning links** are fetched via Tavily web search and appended to every answer
+- 🎥 **YouTube video recommendations** are surfaced for visual learners
+- 🗺️ **Structured learning paths** with topic-by-topic navigation in the sidebar
 - The UI never exposes internal retrieval mechanics — the assistant speaks like a confident tutor, not a search engine
 
 ---
 
-## Live App : https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/
+## 🔗 Live Demo
+
+> **[🚀 Try the live app →](https://placement-prep-assistant-aapptwyurpe5yl8rpealcph.streamlit.app/)**
+
+---
+
+## 📸 Screenshots
+
+### 🏠 Homepage — Landing View
+![Homepage](screenshots/screenshot_homepage.png)
+*The landing page with stats (24 topics, 150+ resources, 100+ videos), suggested questions, and the structured sidebar with Learning Paths and Knowledge Base.*
+
+---
+
+### 💬 AI Answer — Structured Interview Response
+![AI Answer](screenshots/screenshot_answer.png)
+*A structured answer to "Difference between Mutex and Semaphore" — includes definition, explanation, examples, and an interview tip.*
+
+---
+
+### ⚙️ Generating Answer — Live Status Steps
+![Generating Answer](screenshots/screenshot_generating.png)
+*The assistant processes questions in real time, showing step-by-step status: Analyzing → Searching Knowledge Base → Finding Resources → Generating Answer.*
+
+---
+
+### 📚 Curated Resources — Reading & Videos
+![Resources](screenshots/screenshot_resources.png)
+*Every answer includes recommended reading articles (with difficulty badges) and YouTube video cards from top educators.*
+
+---
+
+### 🏷️ Answer Metadata — Difficulty & Company Tags
+![Metadata](screenshots/screenshot_metadata.png)
+*Answers are enriched with difficulty level, companies that frequently ask the question (e.g. Microsoft, Apple, VMware), and pro recruiter tips.*
 
 ---
 
