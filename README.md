@@ -378,7 +378,9 @@ Then run `streamlit run app.py` — the index rebuilds automatically.
 
 ## 📄 License
 
-This project is provided as-is for educational purposes.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
