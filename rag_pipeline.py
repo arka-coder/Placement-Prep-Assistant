@@ -26,7 +26,7 @@ from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 
 # ── Tavily web-search helper (fails silently if key missing) ───────────────────
-from tavily_search import get_useful_links
+from tavily_search import get_useful_links, get_youtube_recommendations
 
 # ── Retrieval debug logger ─────────────────────────────────────────────────────
 logging.basicConfig(
@@ -285,7 +285,7 @@ class RAGPipeline:
         self.qa_chain = self.rag_chain  # backwards-compat alias
         print("QA chains created successfully (RAG + General + Hybrid Router)")
 
-    def query(self, question: str) -> Tuple[str, List[dict], List[dict]]:
+    def query(self, question: str) -> Tuple[str, List[dict], List[dict], List[dict]]:
         """
         Hybrid query: routes to RAG, HYBRID, or GENERAL mode based on
         FAISS similarity scores so the assistant never unnecessarily fails.
@@ -402,13 +402,15 @@ class RAGPipeline:
 
         logger.info("Answer generated (%d chars) | mode=%s", len(answer), mode)
 
-        # ── Step 9: Fetch real-time learning links (Tavily) ───────────────────
+        # ── Step 9: Fetch real-time learning links + YouTube videos (Tavily) ──
         # Called AFTER answer generation so a slow network never delays the LLM.
-        # get_useful_links() always returns [] on error — app is never broken.
-        links = get_useful_links(question)
+        # Both helpers always return [] on error — app is never broken.
+        links  = get_useful_links(question)
+        videos = get_youtube_recommendations(question)
         logger.info("Tavily links fetched: %d", len(links))
+        logger.info("YouTube videos fetched: %d", len(videos))
 
-        return answer, sources, links
+        return answer, sources, links, videos
 
     def initialize(self, rebuild_vector_store: bool = False) -> None:
         """
